@@ -46,6 +46,8 @@
 - 개념지향 프로그래밍 (메인 프로그램 생성에 개념을 사용하는 것에 기반되어 있다)
 - **반응형 프로그래밍**
 
+## [반응형 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/01_sample/README.md) 
+
 
 ### 참조 
 
