@@ -17,5 +17,13 @@
 
 ##### Pod에 대하여 
 ##### Pod Scheduling 
+##### Replica
+##### Service 
+##### Volume ( Basic )  
+##### Volume ( Advacned ) 
+##### ConfigMap 
+##### Secret 
+##### Metadata with Pod / Resource Access 
+
 
 
