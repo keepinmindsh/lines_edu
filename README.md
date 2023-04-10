@@ -4,8 +4,10 @@
 
 # [테스트 주도 개발](https://github.com/keepinmindsh/lines_edu/blob/main/tdd/README.md) 
 
-# [Gof의 디자인 패턴]()
+# [Gof의 디자인 패턴](https://github.com/keepinmindsh/lines_edu/blob/main/designpattern/README.md)
 
 # [쿠버네티스](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/README.md) 
+
+# [기술 용도](https://github.com/keepinmindsh/lines_edu/blob/main/techword/README.md)
 
 
