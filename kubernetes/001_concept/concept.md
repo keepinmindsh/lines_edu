@@ -1,3 +1,6 @@
+![Kubernetes Overview](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/kubernetes_overview.png)
+
+
 # Kubernetes의 이해
 
 - 개발자가 애플리케이션 핵심 기능에 집중 할 수 있도록 지원
