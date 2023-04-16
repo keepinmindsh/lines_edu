@@ -1,5 +1,4 @@
-![Kubernetes Overview](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/kubernetes_overview.png)
-
+![Kubernetes Architecture](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/001_concept/kubernetes_architecture.png)
 
 # Kubernetes의 이해
 
@@ -31,3 +30,5 @@
 - 컨테이너를 실행하는 도커, rkt 또는 다른 컨테이너 런타임
 - API 서버와 통신하고 노드의 컨테이너를 관리하는 Kubelet
 - 애플리케이션 구성 요소 간에 네트워크 트래픽을 로드 밸런싱 하는 쿠버네티스 서비스 프록시 
+
+![Kubernetes Overview](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/kubernetes_overview.png)
