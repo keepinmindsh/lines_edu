@@ -31,4 +31,15 @@
 - API 서버와 통신하고 노드의 컨테이너를 관리하는 Kubelet
 - 애플리케이션 구성 요소 간에 네트워크 트래픽을 로드 밸런싱 하는 쿠버네티스 서비스 프록시 
 
+### kubelet 
+### kube-proxy 
+### Container runtime 
+
 ![Kubernetes Overview](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/kubernetes_overview.png)
+
+### 그 뒤로... 
+
+#### Kubernetes Object 
+#### Kubectl CLI 
+#### DevOps 
+#### Infrastructure를 이해하는 것 
