@@ -33,7 +33,7 @@ ADD app.js/app.js
 ENTRYPOINT["node", "app.js"]
 ```
 
-#### Docker의 image를 build 하기 
+#### Docker의 image를 build / run / inspect 하기 
 
 - Shell에서 Dockerfile을 Image 로 빌드하기 
 
