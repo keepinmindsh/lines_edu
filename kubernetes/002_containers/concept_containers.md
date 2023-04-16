@@ -2,7 +2,7 @@
 
 ### Container 구성 
 
-```script 
+```javascript 
 const http = require('http')
 const os = require('os')
 
