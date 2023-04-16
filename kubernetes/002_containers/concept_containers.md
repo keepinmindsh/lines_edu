@@ -2,6 +2,8 @@
 
 ### Container 구성 
 
+#### NodeJS 서비스 생성 
+
 ```javascript 
 const http = require('http')
 const os = require('os')
@@ -17,6 +19,17 @@ const handler =function(request, response) {
 const www = http.createServer(handler);
 www.listen(8080)
 ```
+
+#### Dockerfile 생성하기 
+
+```Dockerfile 
+FROM node:7
+ADD app.js/app.js
+
+ENTRYPOINT["node", "app.js"]
+```
+
+
 
 
 > [Minikube Start](https://minikube.sigs.k8s.io/docs/start/)   
