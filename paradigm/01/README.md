@@ -55,6 +55,10 @@
 - **객체기반 프로그래밍**
 - **반응형 프로그래밍**
 
+## 프로그래밍 패러다임 주요 계층도 
+
+![Programming Paradigm](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm_hierache.png)
+
 ### 참조 
 
 > [[김용석의 언어탐방] 패러다임: 지팡이가 설 곳](https://www.hani.co.kr/arti/opinion/column/991798.html)
