@@ -4,6 +4,8 @@
 
 #### NodeJS 서비스 생성 
 
+- app.js로 아래 파일로 생성하기 
+
 ```javascript 
 const http = require('http')
 const os = require('os')
