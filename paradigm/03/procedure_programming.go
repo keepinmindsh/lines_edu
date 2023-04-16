@@ -2,29 +2,42 @@ package main
 
 import "fmt"
 
-// Declare a function to calculate the area of a rectangle
-func calculateArea(width, height float64) float64 {
-    return width * height
+type Point struct {
+	X int
+	Y int
 }
 
-// Declare a function to get user input
-func getUserInput(prompt string) float64 {
-    var value float64
+type Square struct {
+	TopLeft Point
+	Side    int
+}
 
-    fmt.Print(prompt)
-    fmt.Scanf("%f", &value)
+type Rectangle struct {
+	TopLeft Point
+	Height  int
+	Width   int
+}
 
-    return value
+type Circle struct {
+	center Point
+	radius int
 }
 
 func main() {
-    // Get user input for width and height
-    width := getUserInput("Enter the width of the rectangle: ")
-    height := getUserInput("Enter the height of the rectangle: ")
+	area := getArea("CIRCLE")
 
-    // Calculate the area
-    area := calculateArea(width, height)
+	fmt.Println(area)
+}
 
-    // Print the result
-    fmt.Printf("The area of the rectangle is: %.2f\n", area)
+func getArea(shape string) int {
+	if shape == "CIRCLE" {
+		circle := &Circle{}
+		return circle.radius * circle.center.Y * circle.center.X
+	} else if shape == "SQUARE" {
+		square := &Square{}
+		return square.TopLeft.X * square.TopLeft.Y * square.Side
+	} else {
+		rectangle := &Rectangle{}
+		return rectangle.Width * rectangle.Height * rectangle.TopLeft.X * rectangle.TopLeft.Y
+	}
 }
