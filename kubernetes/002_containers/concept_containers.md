@@ -3,5 +3,5 @@
 
 
 
-> [minikube start](https://minikube.sigs.k8s.io/docs/start/)
+> [minikube start](https://minikube.sigs.k8s.io/docs/start/)   
 > [kubectl context switch](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
