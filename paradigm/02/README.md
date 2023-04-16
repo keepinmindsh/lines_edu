@@ -13,14 +13,14 @@
 
 그럼, 이제 다양한 패러다임에 대해서 알면 좋을 만한 패러다임 별로 이해보도록 하자. 
 
-## [명령형 프로그래밍에 대하여]()
+## [명령형 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/imperative_programming.md)
 
-## [선언형 프로그래밍에 대하여]()
+## [선언형 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/declarative_programming.md)
 
-## [절차적 프로그래밍에 대하여]() 
+## [절차적 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/procedure_programming.md) 
 
-## [함수형 프로그래밍에 대하여]() 
+## [함수형 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/functional_programming.md) 
 
-## [객체지향 프로그래밍에 대하여]() 
+## [객체지향 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/oriented_object_programming.md) 
 
-## [반응형 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/01_sample/README.md) 
+## [반응형 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/reactive_programming.md) 
