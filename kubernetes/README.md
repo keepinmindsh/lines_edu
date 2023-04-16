@@ -4,7 +4,7 @@
 
 ### [쿠버네티스란?](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/001_concept/concept.md)  
 
-#### 쿠버네티스를 왜 사용하는 것인가? 
+#### [쿠버네티스를 왜 사용하는 것인가?](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/001_concept/why_kubernetes.md)
 #### 어떻게 활용되는 것인가? 
 
 ### 쿠버네티스 사전 준비를 위한 컨테이너의 이해 
