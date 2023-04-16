@@ -1,8 +1,8 @@
 # 쿠버네티스 
 
-## [쿠버네티스의 이해](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/001_concept/concept.md) 
+## [쿠버네티스의 이해
 
-### 쿠버네티스란? 
+### [쿠버네티스란?](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/001_concept/concept.md)  
 
 #### 쿠버네티스를 왜 사용하는 것인가? 
 #### 어떻게 활용되는 것인가? 
