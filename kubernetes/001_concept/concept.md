@@ -1,4 +1,4 @@
-![Kubernetes Architecture](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/001_concept/kubernetes_architecture.png)
+![Kubernetes Architecture](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/001_concept/kubernetes_architecture_01.png)
 
 # Kubernetes의 이해
 
