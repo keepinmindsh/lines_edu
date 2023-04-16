@@ -1,6 +1,6 @@
 # 쿠버네티스 
 
-## 쿠버네티스의 이해 
+## [쿠버네티스의 이해](https://github.com/keepinmindsh/lines_edu/blob/main/kubernetes/001_concept/concept.md) 
 
 ### 쿠버네티스란? 
 
