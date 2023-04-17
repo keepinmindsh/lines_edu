@@ -18,3 +18,5 @@
 
 
 ## [Declarative Programming Code](https://github-history.netlify.app/keepinmindsh/lines_edu/blob/main/paradigm/03/declarative_programming.go)
+
+## [More Deeper]()
