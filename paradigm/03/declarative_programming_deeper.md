@@ -10,6 +10,8 @@
 
 ### 구현을 내부에 숨겨서 캡슐화 시키는 것도 "선언형" 프로그래밍이라고 할 수 있다. 
 
+명령형 방식과 선언형 방식의 차이는 아래의 예제코드에서 확인할 수 있다. 
+
 - 명령형 방식 
 
 ```golang
@@ -69,5 +71,18 @@ func (d *declarative) loop() *declarative {
 func (d *declarative) result() []int {
 	return d.list
 }
+
 ```
 
+우리가 쉽게 이해 하기에는 SQL이 선언형 언어로 가장 명확하지만, 선언형 언어의 경우에도 결국 내부 구현을 캡슐화하여 숨기고 있을 뿐이다. 
+
+선언형 프로그래밍 언어가 우리에가 시사하는 바는 우리가 다루는 도메인을 좀더 명확하게 이해할 수 있게 만들어 준다는 것이다. 
+
+
+선언형 프로그래밍 언어로 파생된 다양한 개념/언어는, 
+
+- SQL
+- Behavier Driven Development 
+  - [https://github.com/jaypipes/gdt](https://github.com/jaypipes/gdt)
+- Domain Specific Language 
+  - Method Chaining  	
