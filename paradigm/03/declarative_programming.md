@@ -19,4 +19,4 @@
 
 ## [Declarative Programming Code](https://github-history.netlify.app/keepinmindsh/lines_edu/blob/main/paradigm/03/declarative_programming.go)
 
-## [More Deeper]()
+## [More Deeper](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/declarative_programming_deeper.md)
