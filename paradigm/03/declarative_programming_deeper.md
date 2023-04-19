@@ -84,7 +84,11 @@ func (d *declarative) result() []int {
 선언형 프로그래밍 언어로 파생된 다양한 개념/언어는, 
 
 - SQL
-  - []() 	
+```sql
+SELECT *
+  FROM Table 
+ WHERE A = 1
+```
 - Behavier Driven Development 
   - [https://github.com/jaypipes/gdt](https://github.com/jaypipes/gdt)
 - Domain Specific Language 
