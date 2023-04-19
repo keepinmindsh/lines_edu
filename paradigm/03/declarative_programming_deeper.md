@@ -93,3 +93,22 @@ SELECT *
   - [https://github.com/jaypipes/gdt](https://github.com/jaypipes/gdt)
 - Domain Specific Language 
   - [Method Chaining](https://github-history.netlify.app/keepinmindsh/lines_edu/blob/main/paradigm/03/declarative/method_chaning.go)  	
+- CSS 
+```css
+#myImageId {
+    height: 100px;
+    width: 100px;
+}
+```
+
+
+
+# 선언형 프로그래밍은...
+
+## Context Independence를 이룰 수 있는 근간이 되는 프로그래밍 방식입니다. 
+
+선언형 프로그래밍은 동작하는 환경에 영향을 받지 않을 수 있는 방법입니다. 이것은 앞서도 설명한 것처럼, "무엇"을 해야하는 지에 대해서만 목표를 갖고 있기 때문에  
+어떤 환경에서 어떻게 동작하는지 중요하지 않습니다. 그렇기 때문에 "어떻게"에 집중하면 명령형 프로그래밍은 동작하는 환경의 영향을 받을 수 밖에 없습니다.  
+예를 들어, C#은 기본적으로 윈도우에서 가장 최적화되어 있다는 부분이 하나의 예시가 될 수 있겠습니다.  
+
+
