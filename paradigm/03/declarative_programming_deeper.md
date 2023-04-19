@@ -76,13 +76,16 @@ func (d *declarative) result() []int {
 
 우리가 쉽게 이해 하기에는 SQL이 선언형 언어로 가장 명확하지만, 선언형 언어의 경우에도 결국 내부 구현을 캡슐화하여 숨기고 있을 뿐이다. 
 
-선언형 프로그래밍 언어가 우리에가 시사하는 바는 우리가 다루는 도메인을 좀더 명확하게 이해할 수 있게 만들어 준다는 것이다. 
+그렇기 때문에 다양한 언어에서 함수를 정의하고 사용하는 방식에 따라서 선언적인 방식으로 코드를 작성할 수 있는 방법들을 제공하고 있다. 
+
+선언형 프로그래밍 언어가 우리에게 시사하는 바는 우리가 다루는 도메인을 좀더 명확하게 이해할 수 있게 만들어 준다는 것이다. 
 
 
 선언형 프로그래밍 언어로 파생된 다양한 개념/언어는, 
 
 - SQL
+  - []() 	
 - Behavier Driven Development 
   - [https://github.com/jaypipes/gdt](https://github.com/jaypipes/gdt)
 - Domain Specific Language 
-  - Method Chaining  	
+  - [Method Chaining]()  	
