@@ -88,4 +88,4 @@ func (d *declarative) result() []int {
 - Behavier Driven Development 
   - [https://github.com/jaypipes/gdt](https://github.com/jaypipes/gdt)
 - Domain Specific Language 
-  - [Method Chaining]()  	
+  - [Method Chaining](https://github-history.netlify.app/keepinmindsh/lines_edu/blob/main/paradigm/03/declarative/method_chaning.go)  	
