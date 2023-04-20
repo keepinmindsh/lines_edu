@@ -1,4 +1,8 @@
 
+# Tdd Basic 
+
+### [Why TDD](https://github.com/keepinmindsh/lines_edu/blob/main/tdd/basic/README.md)
+
 # 요구사항 
 
 - java/golang의 순수 함수를 제외하고 어떤 라이브러리도 사용해서는 안된다. ( gin, mux 등등 사용 불가 ) 
