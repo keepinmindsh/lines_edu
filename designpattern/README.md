@@ -35,7 +35,7 @@
 
 ### 우리가 먼저 알아야 할 것 
 
-#### 추상화 
+#### [추상화](https://github.com/keepinmindsh/lines_edu/blob/main/designpattern/basic/abstaction.md)
 
 #### 상속 / 합성 
 
