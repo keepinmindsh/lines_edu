@@ -18,3 +18,5 @@
   - 절차지향과 객체지향은 상호 보완적인 관계가 존재한다. **절차적인 코드는 기존 자료 구조를 변경하지 않으면서 새 함수를 추가하기 쉽다. 반면, 객체지향 코드는 기본 함수를 변경하지 않으며서 새 클래스를 추가하기 쉽다.**
 
 ## [Procedure Programming Code](https://github-history.netlify.app/keepinmindsh/lines_edu/blob/main/paradigm/03/procedure_programming.go)
+
+## [More Deeper](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/procedure_programming_deeper.md)
