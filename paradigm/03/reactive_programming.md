@@ -19,7 +19,7 @@
 - "데이터 플로우와 상태 변경을 전파한다는 생각에 근간을 둔 프로그래밍 패러다임"  
 - "막힘 없이 흘러다니는 데이터(이벤트)를 통해 사용자에게 자연스러운 응답을 주고, 규모 탄력적으로 리소스를 사용하며 실패에 있어서 유연하게 대처한다."   
 
-![](https://keepinmindsh.github.io/lines/assets/img/Reactive.png){: .align-center}
+![](https://keepinmindsh.github.io/lines/assets/img/Reactive.png)
 
 #### Responsive : 사용자에 대한 반응  
 
@@ -257,11 +257,11 @@ request는 long 타입의 파라미터를 받고 있는데 Subscriber가 이 메
 
 #### Reactive Basic Flow : Publisher - Subscriber - Subscription
 
-![](https://keepinmindsh.github.io/lines/assets/img/reactive_basic_flow.png){: .align-center}
+![](https://keepinmindsh.github.io/lines/assets/img/reactive_basic_flow.png)
 
 - Publisher에 Subscriber가 구독(등록)되면, Publisher가 실행(subscribe)될 때 Publisher 통해서 데이터(스트림) 또는 시퀀스를 Subscriber로 전달하게됩니다. 
 - 이때 Publisher는 Subscriber에 정의된 OnSubscribe()를 호출하고, Subscriber는 request(n)를 호출하여 몇개의 데이터를 보내달라고 Publisher에게 Subscription을 통해서 요청하게 됩니다. 
 - Subscrition을 통해 정의된 요청 갯수에 의해서 request 메소드 내에서 Subscriber의 onNext, onError, OnComplete를 제어할 수 있습니다.
 - Subscriber가 동작하던 도중에 장애/에러 발생으로 인하여 처리를 중단해야할 때 subscription 객체를 이용해서 cancel을 호출 하고 Flag를 관리한다면, 해당 Flow 전체를 중단할 수 있습니다. 
 
-![](https://keepinmindsh.github.io/lines/assets/img/reactive_interaction.png){: .align-center}
+![](https://keepinmindsh.github.io/lines/assets/img/reactive_interaction.png)
