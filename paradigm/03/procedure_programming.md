@@ -1,4 +1,4 @@
-# Procedure Programming 
+# Imperative > Procedure Programming 
 
 ### 절차형 프로그래밍(procedural programming)은 컴퓨터 프로그래밍 패러다임 중 하나로, 일련의 절차와 순서에 따라 프로그램이 실행되는 방식을 말합니다. 
 
@@ -15,7 +15,7 @@
 - C, Fortran, Pascal, etc 
   - 여기에서 절차적 프로그래밍은 다양한 언어에서 사용이 가능하며, 실제로 Logic을 작성할 때는 절차적으로 작성하게 된다. 
   - 추후에 논의 하게 될 객체 지향 개발 방법론에서 절차적 프로그래밍과 객체지향 개발 방법론은 Cost에 따라 적절하게 혼합해서 사용해야 한다. 
-  - 절차지향과 객체지향은 상호 보완적인 관계가 존재한다. **절차적인 코드는 기존 자료 구조를 변경하지 않으면서 새 함수를 추가하기 쉽다. 반면, 객체지향 코드는 기본 함수를 변경하지 않으며서 새 클래스를 추가하기 쉽다.**
+  - 절차지향과 객체지향은 상호 보완적인 관계가 존재한다. **절차적인 코드는 기존 자료 구조를 변경하지 않으면서 새 함수를 추가하기 쉽다. 반면, 객체지향 코드는 기본 함수를 변경하지 않으면서 새 클래스를 추가하기 쉽다.**
 
 ## [Procedure Programming Code](https://github-history.netlify.app/keepinmindsh/lines_edu/blob/main/paradigm/03/procedure_programming.go)
 

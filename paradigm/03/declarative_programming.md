@@ -16,7 +16,6 @@
 - SQL, Prolog, Haskell, Scala, F# 등에서 주로 사용 
   - 다만 함수형 프로그래밍을 지원하는 다양한 언어 Python, JavaScript, Python, Ruby와 같은 다중 패러다임 언어에서도 선언형 방식을 사용 가능함. 
 
-
 ## [Declarative Programming Code](https://github-history.netlify.app/keepinmindsh/lines_edu/blob/main/paradigm/03/declarative_programming.go)
 
 ## [More Deeper](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/declarative_programming_deeper.md)

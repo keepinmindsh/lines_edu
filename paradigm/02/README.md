@@ -21,7 +21,7 @@
 
 ## [함수형 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/functional_programming.md) 
 
-## [병렬 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/functional_programming.md)
+## [병렬 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/parrelel_programming.md)
 
 ## [객체지향 프로그래밍에 대하여](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/oriented_object_programming.md) 
 
