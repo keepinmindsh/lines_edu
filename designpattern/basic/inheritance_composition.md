@@ -5,7 +5,7 @@
 **상속** 의 경우, 프로그래밍 언어에 따라서 지원되지 않은 개념일 수도 있다.
 여기에서는 Java를 바탕으로 상속 및 합성의 개념을 설명하고, 다른 언어로 확장시켜 보겠다. 
 
-## 상속의 개념
+## 상속의 개념 ( Inheritance )
 
 ```java 
 package com.lines.sample;
@@ -45,4 +45,4 @@ class Howard extends DrinkingSkill {
 }
 ```
 
-## 합성의 개념 
+## 합성의 개념 ( Composition )
