@@ -30,6 +30,13 @@
 - uchDB, SimpleDB, Riak 등 NoSQL DB에서 맵리듀스의 구현 혹은 DBMS의 전체 구현을 위해 많이 사용되며,
 -  채팅과 메시징, RabbitMQ, WhatsApp 서버, 금융시스템, 게임 서버와 같은 분야에 이용
 
+```erlang
+-module(hello).
+-export([world/0]).
+
+world() -> io:format("Hello, world\n").
+```
+
 > [얼랭은 무엇인가?](http://pminho0503.cafe24.com/bbs_view.php?s=28&pseq=26&mnid=1)   
 > [나무위키 - 얼랭](https://namu.wiki/w/Erlang)  
 
