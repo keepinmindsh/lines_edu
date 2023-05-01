@@ -16,4 +16,5 @@
 커피 10모금을 마신다고 할 때 2번째 커피 모금을 넘기는 것과 신문 기사의 다섯 번째 문단을 읽는 것 
 중에서 어느 것을 먼저 해야하는지는 그다지 상관이 없는 것이 됩니다. 그때그때 편한대로 하면 되는 것이지요 
 
-## [golang - Parallelism & Concurrency]()
+## [golang - Parallelism & Concurrency](https://github.com/keepinmindsh/lines_edu/blob/main/paradigm/03/parrelel_programming_deeper.md)
+
