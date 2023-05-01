@@ -1,9 +1,11 @@
 package main
 
+import "testing"
+
 // TODO : 만약 고속버스가 아닌 비행기를 이용해야 한다면?
 // TODO : 만약 걸어가야 한다면?
 
-func main() {
+func Test_Main(t *testing.T) {
 
 	factory := Factory(Bus{})
 
