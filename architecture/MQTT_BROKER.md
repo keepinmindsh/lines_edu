@@ -48,6 +48,24 @@ $ docker run -it --name lines-mos-mqtt -p 1883:1883  -v /Users/lines/mos-docker/
 ```
 
 
+## MQTT Subscribe Wildcard 
+
+### Single Level ( + )
+
+- 해당 레벨에 한하여 topic을 확장한다. 
+  - Single Level + 는 이름에서 알 수 있다시피 topic에서 한단계의 문자열을 대체하는 문자이다. 
+
+```
+chatroom/roomA/+/profile로 subscribe를 하면
+ 
+roomA와 profile이 있는 topic에 모두 subscribe 한다.
+```
+
+### Multi Level ( # ) 
+
+- 해당 레벨과 그 하위 topic 모두 subscribe 한다. 
+  - Multi Level은 여러 단계의 topic을 subscribe 할 수 있도록 한다. 
+
 ## MQTT Go Client Library
 
 - [Client Connection Test Sample](https://github.com/eclipse/paho.golang/blob/master/paho/client_test.go)
