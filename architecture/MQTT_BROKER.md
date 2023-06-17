@@ -23,3 +23,8 @@ $ mkdir -p /Users/lines/mos-docker/mosquitto && mkdir -p /Users/lines/mos-docker
 
 $ docker run -it --name lines-mos-mqtt -p 1883:1883  -v /Users/lines/mos-docker/mosquitto:/mosquitto/ -v /Users/lines/mos-docker/mosquitto/log -v /Users/lines/mos-docker/mosquitto/data:/mosquitto/data -v /Users/lines/mos-docker/mosquitto/config:/mosquitto/config  eclipse-mosquitto
 ```
+
+
+## MQTT Go Client Library
+
+- [Client Connection Test Sample](https://github.com/eclipse/paho.golang/blob/master/paho/client_test.go)
