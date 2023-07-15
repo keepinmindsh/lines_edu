@@ -1,5 +1,12 @@
 # Git Command 
 
+## Index 
+
+- [Git Auth Login 설정](#Git-Auth-Login-설정)
+- [Git Config Global User Info](#Git-Config-Global-User-Info)
+- [Git Branch 원격으로 Push 하기](#Git-Branch-원격으로-Push-하기)
+- [Git 되돌리기](#Git-되돌리기)
+
 #### Git Auth Login 설정 
 
 ```shell
