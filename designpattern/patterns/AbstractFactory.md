@@ -178,6 +178,52 @@ public class Military {
 } 
 ```
 
+
+### Kotlin 에서는 
+
+```kotlin 
+package samples
+
+interface Weapon {
+
+    fun use():String
+}
+
+abstract class WeaponFactory {
+
+    abstract fun buildWeapon(): Weapon
+}
+
+class Crossbow : Weapon {
+
+    companion object Factory : WeaponFactory() {
+        override fun buildWeapon() = Crossbow()
+    }
+
+    override fun use(): String {
+        return "Using crossbow weapon"
+    }
+}
+
+class Katana : Weapon {
+
+    companion object Factory : WeaponFactory() {
+        override fun buildWeapon() = Katana()
+    }
+
+    override fun use(): String {
+        return "Using katana weapon"
+    }
+}
+
+fun CallAbstractFactory() {
+    val factory : WeaponFactory = Crossbow.Factory
+    val crossbow = factory.buildWeapon()
+
+    println(crossbow.use())
+}
+```
+
 ### 작성해보면 좋을 만한 예시 문제 
 
 ```
