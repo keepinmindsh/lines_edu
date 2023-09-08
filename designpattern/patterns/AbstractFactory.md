@@ -97,28 +97,6 @@ func main(){
 
 ### Java 에서는 
 
-```java 
-package DesignPattern.gof_abstractFactory;
-  
-public class Military {
-
-	public static void main(String[] args) {
-
-		TrainingFactory infantryFactory = TrainingProvider.getFactory("infantry");
-
-		Soldier marine = infantryFactory.create("marine");
-
-		marine.attack();
-		marine.getSoldier();
-
-		Soldier firbat = infantryFactory.create("fire");
-
-		firbat.getSoldier();
-		firbat.attack();
-	}
-} 
-```
-
 
 ```java 
 package DesignPattern.gof_abstractFactory;
@@ -172,6 +150,30 @@ public class infantryTraingCenter implements TrainingFactory {
 		}
 		// Null 을 쓰는 것은 좋지 않으나 패턴 설명을 위해 사용함.
 		return null;
+	}
+} 
+```
+
+아래의 코드는 실제 Client에서 사용되는 코드의 예시입니다.  
+
+```java 
+package DesignPattern.gof_abstractFactory;
+  
+public class Military {
+
+	public static void main(String[] args) {
+
+		TrainingFactory infantryFactory = TrainingProvider.getFactory("infantry");
+
+		Soldier marine = infantryFactory.create("marine");
+
+		marine.attack();
+		marine.getSoldier();
+
+		Soldier firbat = infantryFactory.create("fire");
+
+		firbat.getSoldier();
+		firbat.attack();
 	}
 } 
 ```
