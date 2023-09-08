@@ -31,3 +31,161 @@ Abstract Factory 패턴을 이용해서 인터페이스를 통한 객체를 반�
 - 새로운 종류의 제품을 만들기 위해 기존 추상 팩토리를 확장하기가 쉽지 않음, 생성되는 제품은 추상 팩토리가 생성할 수 있는 제품 집합에만 고정되어 있기 때문이다.
 
 ## 실생활의 사례를 통한 패턴의 이해 
+
+### 자동차의 예시 
+
+자동차에 달려있는 타이어는 모두 동일하게 앞,뒤로 구르는 역할을 한다. 
+
+```go 
+type Tire interface {
+	Forward()
+	Backward()
+	Stop()
+	Start()
+}
+```
+
+
+```go 
+package tire
+
+import (
+	"design_pattern/oop/app/car/service/moving"
+	tierUcase "design_pattern/oop/app/car/usecase/tire"
+	domainMaps "design_pattern/oop/domain/maps"
+	steeringDomain "design_pattern/oop/domain/steering"
+
+	"design_pattern/oop/domain/tire"
+)
+
+type TireName string
+
+const (
+	KUMHO TireName = "Kumho"
+	NEXEN TireName = "Nexen"
+)
+
+// Abstract Factory 패턴이 적용된 함수 
+func NewTire(tireName TireName, moving *moving.Moving, steering *steeringDomain.Steering, mapValidator domainMaps.MapValidate) tire.Tire {
+	switch tireName {
+	case KUMHO:
+		return tierUcase.NewKumhoTire(moving, steering, mapValidator)
+	case NEXEN:
+		return tierUcase.NewNexenTire(moving, steering, mapValidator)
+	}
+
+	return nil
+}
+
+```
+
+```go 
+package main 
+
+
+func main(){
+	tire := tire.NewTire(tire.NEXEN, moving, &steering, validater)
+}
+
+```
+
+- tire.Tire 인터페이스를 통해서 금호타이어, 넥센 타이어를 받을 수 있다. ( PolyMorphism )
+- 인터페이스를 Client로 반환하기 때문에 내부 객체를 캡슐화할 수 있다. ( Capsulation )
+- 인터페이스를 반환하기 때문에 Client에서 **사용** 만 가능하며, **변경**할 수 없는 구조로 제약을 적용할 수 있다. ( Open & Close )
+- 객체의 생성 방식에 대해서는 main(client)는 신경쓰지 않는다. 오로지 사용할 뿐이다. ( Loose Coupling )
+
+
+### Java 에서는 
+
+```java 
+package DesignPattern.gof_abstractFactory;
+  
+public class Military {
+
+	public static void main(String[] args) {
+
+		TrainingFactory infantryFactory = TrainingProvider.getFactory("infantry");
+
+		Soldier marine = infantryFactory.create("marine");
+
+		marine.attack();
+		marine.getSoldier();
+
+		Soldier firbat = infantryFactory.create("fire");
+
+		firbat.getSoldier();
+		firbat.attack();
+	}
+} 
+```
+
+
+```java 
+package DesignPattern.gof_abstractFactory;
+  
+public interface Soldier {
+	String getSoldier();
+
+	String attack();
+}  
+```
+
+```java 
+package DesignPattern.gof_abstractFactory;
+  
+public class Marine implements Soldier {
+
+	public String getSoldier() {
+		return null;
+	}
+
+	public String attack() {
+		return null;
+	}
+}
+```
+
+```java
+package DesignPattern.gof_abstractFactory;
+  
+public interface TrainingFactory {
+
+	/**
+	* @param soldierType
+	* @return
+	*/
+	Soldier create(String soldierType);
+} 
+```
+
+```java
+package DesignPattern.gof_abstractFactory;
+
+public class infantryTraingCenter implements TrainingFactory {
+	// infantryTraingCenter는 TrainingFactory의 구현을 담당하면서, 추상 팩토리에서 객체를 생성하는 역할을 맞는다..
+	public Soldier create(String soldierType) {
+		switch (soldierType){
+			case "marine":
+				return new Marine();
+			case "fire":
+				return new Firebat();
+		}
+		// Null 을 쓰는 것은 좋지 않으나 패턴 설명을 위해 사용함.
+		return null;
+	}
+} 
+```
+
+### 작성해보면 좋을 만한 예시 문제 
+
+```
+- 요구사항 정의
+스타 크래프트에서는 다양한 유닛이 존재합니다 탱크와 골리앗을 생산할 수 있는 Factory 마린, 메딕, 파이어뱃을 생산할 수 있는 Barrack 레이스, 사이언스 베슬, 베틀 크루저를 생산할 수 있는 Starport
+
+- 요구사항의 공통화
+모든 건물은 유닛을 생산한다.
+모든 시스템 건물은 추가적으로 지을수 있어야 한다. 하지만 각 건물의 기능이 추가적으로 변경되지 않는다.
+모든 유닛은 공격이 주된 목적을 가진다.
+```
+
+
