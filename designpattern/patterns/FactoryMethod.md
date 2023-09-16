@@ -46,11 +46,32 @@ Factory Method는 **객체의 구현**에 집중합니다.
 
 ## 실생활의 사례를 통한 패턴의 이해 
 
-### 온라인 예약의 예시 
+### 온라인 예약의 예시 ( With Go )
 
 - 아고다 예약 
 - 부킹닷컴 예약 
 - 익스페디아 예약 
+
+```go 
+package domain
+
+type ReservationType string
+
+const (
+	Agoda   ReservationType = "Agoda"
+	Booking ReservationType = "Booking"
+	Expedia ReservationType = "Expedia"
+)
+
+type (
+	Reservation interface {
+		SchedulePeriod()
+		Book()
+		PayMoney()
+	}
+)
+
+```
 
 ```go 
 package main
@@ -178,3 +199,112 @@ func (r Reservation) PayMoney() {
 }
 ```
 
+### 온라인 예약의 예시 ( With Kotlin )
+
+```java
+package domain
+
+enum class ReservationType {
+    Agoda, Booking, Expedia
+}
+
+interface Reservation {
+    fun SchedulePeriod()
+    fun Book()
+    fun PayMoney()
+}
+```
+
+```java 
+import app.usecases.Factory
+import domain.ReservationType
+
+fun main(){
+    val reservation = Factory.GetReservationWay(ReservationType.Agoda)
+
+    reservation.SchedulePeriod()
+
+    reservation.Book()
+
+    reservation.PayMoney()
+}
+```
+
+```java
+package app.usecases
+
+import app.service.agoda.Agoda
+import app.service.booking.Booking
+import app.service.expedia.Expedia
+import domain.Reservation
+import domain.ReservationType
+
+class Factory {
+    companion object {
+        fun GetReservationWay(rsvnType: ReservationType): Reservation {
+            when (rsvnType) {
+                ReservationType.Agoda -> return Agoda()
+                ReservationType.Booking -> return Booking()
+                ReservationType.Expedia -> return Expedia()
+                else -> throw java.lang.RuntimeException("Error!")
+            }
+        }
+    }
+}
+```
+
+```java
+package app.service.agoda
+
+import domain.Reservation
+
+class Agoda : Reservation {
+    override fun SchedulePeriod() {
+        print("Agoda Scheduled!")
+    }
+
+    override fun Book() {
+        print("Agoda Booked!")
+    }
+
+    override fun PayMoney() {
+        print("Agoda Pay Money!")
+    }
+}
+
+package app.service.booking
+
+import domain.Reservation
+
+class Booking : Reservation{
+    override fun SchedulePeriod() {
+        print("Booking.com Scheduled!")
+    }
+
+    override fun Book() {
+        print("Booking.com Booked!")
+    }
+
+    override fun PayMoney() {
+        print("Booking.com Pay Money")
+    }
+}
+
+package app.service.expedia
+
+import domain.Reservation
+
+class Expedia : Reservation {
+    override fun SchedulePeriod() {
+        print("Expedia Scheduled!")
+    }
+
+    override fun Book() {
+        print("Expedia Booked!")
+    }
+
+    override fun PayMoney() {
+        print("Expedia Pay Money!")
+    }
+}
+```
