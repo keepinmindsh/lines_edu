@@ -104,7 +104,7 @@
 - [Lifetimes](https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime.html)
 - [Explicit annotations](https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime/explicit.html)
 - [Functions](https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime/fn.html)
-- [Methods](https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime/methods.html
+- [Methods](https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime/methods.html)
 - [Struct](https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime/struct.html)
 - [Traits](https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime/trait.html)
 - [Bounds](https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime/lifetime_bounds.html)
