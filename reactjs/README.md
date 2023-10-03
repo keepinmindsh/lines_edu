@@ -18,6 +18,8 @@ categories:
 # Index 
 
 - [GetStarted](#getstarted)
+  - [Create React App을 이용하지 않고 빌드 없이 바로 이용하기](#create-react-app-을-이용하지-않고-빌드없이-바로-이용하기)
+  - [Create React App을 이용하여 React Project 생성하기](#create-react-app를-이용하여-react-project-생성하기)
 - [연산자](#-연산자)
 - [Components](#components)
   - [Container Component](#container-component)
@@ -26,8 +28,16 @@ categories:
   - [Portal Component](#portal-component)
   - [Presentational Component](#presentaitional-component)
   - [Pure Component](#pure-component)
-- [Create React App을 이용하지 않고 빌드 없이 바로 이용하기](#create-react-app-을-이용하지-않고-빌드없이-바로-이용하기)
-- [Create React App을 이용하여 React Project 생성하기](#create-react-app를-이용하여-react-project-생성하기)
+- [JSX](#jsx)
+  - [JSX 속성 요소](#jsx-속성-요소)
+  - [JSX 로의 자식 정의](#jsx로의-자식-정의)
+  - [JSX에서의 요소 바인딩](#jsx에서의-요소-바인딩)
+  - [JXS에서의 표현식](#jsx에서의-표현식)
+- [DataTypes]()
+  - [Map을 이용한 다중 Element 및 이벤트 반환 방법](#map을-이용한-다중-element-및-이벤트-반환-방법)
+  - [리스트와 Key](#리스트와-key)
+  - [리스트를 렌더링하기](#list를-렌더링하기)
+  - [Javascript Filter의 활용 방식](#javascript-filter의-활용-방식)
 - [Default Props로 기본값 설정](#defaultprops-로-기본값-설정)
 - [Dom에 엘리먼트 렌더링하기](#dom에-엘리먼트-렌더링하기)
 - [Element](#element)
@@ -39,13 +49,6 @@ categories:
 - [고차 함수 컴포넌트에서의 Forwarding Ref](#forwarding-refs-in-higher-order-components)
 - [if/else 절 핸들링하기](#if-else-절)
 - [Image Append 하기](#image-append-하기)
-- [Javascript Filter의 활용 방식](#javascript-filter의-활용-방식)
-- [JSX](#jsx)
-  - [JSX 속성 요소](#jsx-속성-요소)
-  - [JSX 로의 자식 정의](#jsx로의-자식-정의)
-  - [JSX에서의 요소 바인딩](#jsx에서의-요소-바인딩)
-  - [JXS에서의 표현식](#jsx에서의-표현식)
-- [Map을 이용한 다중 Element 및 이벤트 반환 방법](#map을-이용한-다중-element-및-이벤트-반환-방법)
 - [Pagenation 구현하기](#pagenation-구현하기)
 - [Props](#props)
 - [Props와 State를 나누어 사용하도록 한 이유](#props-와-state를-나누어-사용하도록-한-이유)
@@ -64,7 +67,6 @@ categories:
 - [다중 입력 제어하기](#다중-입력-제어하기)
 - [다차원 연산 처리](#다차원-연산-처리)
 - [렌더링된 엘리먼트 업데이트 하기](#렌더링-된-엘리먼트-업데이트-하기)
-- [리스트와 Key](#리스트와-key)
 - [삼항 연산자](#삼항-연산자)
 - [Props에 대한 정의](#속성에-대한-정의)
 - [역방향 데이터 흐름 추가하기](#역방향-데이터-흐름-추가하기)
@@ -161,6 +163,51 @@ const Table = (props) => {
                 <div>table3</div>
                 <div>table4</div>
                 <div>table5</div>
+            </>
+        }else {
+            displayTable = <></>
+        }
+
+        return displayTable
+    }
+
+    return (
+        <div>
+            {displayTables()}
+        </div>
+    )
+}
+
+export default Table
+```
+
+# List를 렌더링하기 
+
+```javascript
+const Table = (props) => {
+
+    const listOfTables = [
+        {title : "Lines 1", id : 1 },
+        {title : "Jeong 2", id : 2 },
+        {title : "Seung 3", id : 3 },
+        {title : "Bong 4", id : 4 },
+        {title : "Good 5", id : 5 },
+        {title : "BongBong 6", id : 6 },
+    ]
+
+    const displayTables = () => {
+        let displayTable;
+        if(props.isChecked) {
+            displayTable = <>
+                {
+                    listOfTables
+                        .filter(item => {
+                            return props.filtered ? item.title.indexOf(props.filtered) > -1 : true
+                        })
+                        .map(item => {
+                            return <div id={item.id} ><label>{item.title}</label></div>
+                        })
+                }
             </>
         }else {
             displayTable = <></>
