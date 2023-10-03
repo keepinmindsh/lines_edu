@@ -15,6 +15,60 @@ categories:
 
 ***
 
+# GetStarted 
+
+- [Learn ReactJS](https://ko.legacy.reactjs.org/docs/getting-started.html#learn-react)
+
+# 역방향 데이터 흐름 추가하기 
+
+```javascript
+const App = () => {
+    const [filtered, setFilteredText] = useState("")
+    
+    const onEnteredFilteredText = (event) => {
+        setFilteredText(event.target.value)
+    }
+
+    return (
+    <div className="App">
+      <header className="App-header">
+        <Search filtered={filtered} onEnteredFilteredText={onEnteredFilteredText} />
+        <Table filtered={filtered} />
+      </header>
+    </div>
+    );
+}
+
+export default App;
+```
+
+```javascript
+const Search = (props) => {
+    return <div><input value={props.filtered} onChange={props.onEnteredFilteredText} ></input></div>
+}
+
+export default Search
+```
+
+```javascript
+const Table = (props) => {
+    return (
+        <div>
+            {
+                props.filtered ? <div> filtered text </div> : <></>
+            }
+            <div>table1</div>
+            <div>table2</div>
+            <div>table3</div>
+            <div>table4</div>
+            <div>table5</div>
+        </div>
+    )
+}
+
+export default Table
+```
+
 # props 와 state를 나누어 사용하도록 한 이유
 
 먼저 개발자들에게 명확한 관념 모델(static mental model)을 제공합니다.
