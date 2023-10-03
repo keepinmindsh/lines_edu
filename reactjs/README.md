@@ -17,7 +17,7 @@ categories:
 
 # GetStarted 
 
-- [Learn ReactJS](https://ko.legacy.reactjs.org/docs/getting-started.html#learn-react)
+- [Learn ReactJS](https://react.dev/learn)
 
 # 역방향 데이터 흐름 추가하기 
 
