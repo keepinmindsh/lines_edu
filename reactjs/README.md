@@ -1,14 +1,14 @@
 
 ---
-title: "React JS"
-excerpt: "SPA 개발 및 CBD 기반의 개발을 위한 웹 프레임워크"
+title: "React JS"   
+excerpt: "SPA 개발 및 CBD 기반의 개발을 위한 웹 프레임워크"  
 
-categories:
-- Script
-  tags:
-- Script
-  classes: wide
-  last_modified_at: 2021-06-29T22:49:00-05:00
+categories:  
+- Script  
+  tags:  
+- Script  
+  classes: wide  
+  last_modified_at: 2021-06-29T22:49:00-05:00  
 ---
 
 > 다스림의 표준 - 저절로 다스려지게 하라.
