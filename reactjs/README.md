@@ -29,10 +29,9 @@ categories:
 > npm install -g create-react-app  
 
 
-> create-react-app hello-world   
-> cd hello-world  
+> create-react-app hello-world      
+> cd hello-world      
 > npm start   
-
 ```
 
 # 역방향 데이터 흐름 추가하기 
@@ -78,6 +77,39 @@ const Table = (props) => {
             <div>table3</div>
             <div>table4</div>
             <div>table5</div>
+        </div>
+    )
+}
+
+export default Table
+```
+
+# 제어 흐름 제어하기 
+
+displayTables 함수 내에서 isChecked 상태 변수에 의해서 Component가 Rendering될 때 if/else 문에서 component를 개별로 정의하여 반환하는 코드를 작성할 수 있습니다. 
+
+```javascript
+const Table = (props) => {
+    const displayTables = () => {
+        let displayTable;
+        if(props.isChecked) {
+            displayTable = <>
+                <div>table1</div>
+                <div>table2</div>
+                <div>table3</div>
+                <div>table4</div>
+                <div>table5</div>
+            </>
+        }else {
+            displayTable = <></>
+        }
+
+        return displayTable
+    }
+
+    return (
+        <div>
+            {displayTables()}
         </div>
     )
 }
