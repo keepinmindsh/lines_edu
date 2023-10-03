@@ -19,6 +19,22 @@ categories:
 
 - [Learn ReactJS](https://react.dev/learn)
 
+# create-react-app를 이용하여 react-project 생성하기
+
+```
+# create-react-app 을 이용한 작업 환경 구성하기   
+# npm {명령어} -{옵션} {Package}           
+# install Package 설치하기   
+# -g 전역에 설치하기                    
+> npm install -g create-react-app  
+
+
+> create-react-app hello-world   
+> cd hello-world  
+> npm start   
+
+```
+
 # 역방향 데이터 흐름 추가하기 
 
 ```javascript
@@ -75,24 +91,6 @@ export default Table
 관념 모델은 무엇이 어떻게 동작하는지 이해할 때 진행되는 일련의 사고 프로세스를 의미합니다.
 즉, 논리적으로 이치에 맞는 사고 모델을 제공한다는 것이다.
 
-# create-react-app 를 이용하여 react-project 생성하기
-
-```
-
-# create-react-app 을 이용한 작업 환경 구성하기
-# npm {명령어} -{옵션} {Package}         
-# install Package 설치하기 
-# -g 전역에 설치하기                    
-> npm install -g create-react-app
-
-
-> create-react-app hello-world 
-
-> cd hello-world
-
-> npm start 
-
-```
 
 # create-react-app 을 이용하지 않고 빌드없이 바로 이용하기
 
