@@ -13,8 +13,8 @@
 
 ### 풀이
 
-Builder 를 사용해야 하는 주요한 경우는 내가 개발 하는 비즈니스 로직 내의 인자, 파라미터가 명시적으로 정해져 있지 않고, 추후의 변경 가능성을 고려 했을 때, 
-함수 파라미터의 인자를 늘리는 방식이 아닌 여러 인자를 담고 있는 인자 하나를 **전달** 하여 추후의 변경 영향도에 대응하는 것 입니다. 
+Builder 를 사용해야 하는 주요한 경우는 내가 개발 하는 비즈니스 로직 내의 인자, 파라미터가 명시적으로 정해져 있지 않고, 추후의 변경 가능성 을 고려 했을 때, 
+함수 파라미터 의 인자를 늘리는 방식이 아닌 여러 인자를 담고 있는 인자 하나를 **전달** 하여 추후의 변경 영향도 에 대응 하는 것 입니다. 
 
 ### 장점 
 
@@ -25,8 +25,115 @@ Builder 를 사용해야 하는 주요한 경우는 내가 개발 하는 비즈�
 
 ## 실생활의 사용에 대한 예시 
 
-### Go 에서는 
+### Go 에서는
 
+```go 
+package expedia
+
+import "builder/domain"
+
+type Expedia struct {
+}
+
+func NewExpediaReservation() domain.Reservation {
+	return &Expedia{}
+}
+
+func (e Expedia) MakeReservation(reservation *domain.ReservationBuilder) {
+	//TODO implement me
+	panic("implement me")
+}
+
+```
+
+```go 
+package factory
+
+import (
+	"builder/app/expedia"
+	"builder/domain"
+)
+
+func NewReservationWay(rsvnType domain.RsvnType) domain.Reservation {
+
+	switch rsvnType {
+	case domain.Expedia:
+		return expedia.NewExpediaReservation()
+	case domain.Booking:
+	case domain.Agoda:
+	}
+
+	return nil
+}
+```
+
+```go 
+package domain
+
+type (
+	Reservation interface {
+		MakeReservation(reservation *ReservationBuilder)
+	}
+)
+
+type RsvnType string
+
+const (
+	Agoda   RsvnType = "Agoda"
+	Booking RsvnType = "Booking"
+	Expedia RsvnType = "Expedia"
+)
+
+// ReservationBuilder TODO Pointer를 사용하는 부분이 있어서 아래의 코드에서 설정해야할 부분을 검토 필요, 메모리 상의 효율을 검토 필요!
+type ReservationBuilder struct {
+	RsvnType        RsvnType
+	ReservationName string
+}
+
+func NewReservationBuilder() ReservationBuilder {
+	return ReservationBuilder{}
+}
+
+func (r *ReservationBuilder) Type(rsvnType RsvnType) *ReservationBuilder {
+	r.RsvnType = rsvnType
+
+	return r
+}
+
+func (r *ReservationBuilder) RsvnName(reservationName string) *ReservationBuilder {
+	r.ReservationName = reservationName
+
+	return r
+}
+
+func (r *ReservationBuilder) Make() *ReservationBuilder {
+	return r
+}
+```
+
+```go 
+package main
+
+import (
+	"builder/app/factory"
+	"builder/domain"
+	"fmt"
+)
+
+func main() {
+	builder := domain.NewReservationBuilder()
+
+	builder.Type(domain.Expedia).RsvnName("Bongs")
+
+	reservationBuilder := builder.Make()
+
+	reservationWay := factory.NewReservationWay(domain.Expedia)
+
+	reservationWay.MakeReservation(reservationBuilder)
+
+	fmt.Println("Reservation Type: " + reservationBuilder.RsvnType)
+}
+```
 
 ### Java 에서는 
 
@@ -342,4 +449,84 @@ val redVelvet =
 fun main() {
     print("${redVelvet}")
 } 
+```
+
+### Dart 에서는 
+
+```dart 
+enum UnitType { Marine, Medic, FireBat }
+
+class Builder {
+  String name;
+  int age;
+  UnitType type;
+
+  Builder({required this.name, required this.age, required this.type});
+}
+
+class Barrack {
+  makeUnit(Builder builder){
+    switch(builder.type){
+      case UnitType.Marine :
+        return Marine();
+      case UnitType.FireBat :
+        return FireBat();
+      case UnitType.Medic :
+        return Medic();
+    }
+  }
+}
+
+abstract interface class Unit {
+  void attack();
+  void defence();
+}
+
+class Marine implements Unit {
+  @override
+  void attack() {
+    print("Marine Attack!");
+  }
+
+  @override
+  void defence() {
+    print("Marine Defence!");
+  }
+}
+
+class Medic implements Unit {
+  @override
+  void attack() {
+    // TODO: implement attack
+  }
+
+  @override
+  void defence() {
+    // TODO: implement defence
+  }
+}
+
+class FireBat implements Unit {
+  @override
+  void attack() {
+    // TODO: implement attack
+  }
+
+  @override
+  void defence() {
+    // TODO: implement defence
+  }
+
+}
+
+void main(){
+  var builder = Builder(name: "Lines", age: 500, type: UnitType.Marine);
+
+  var barrack = Barrack();
+
+  Unit makeUnit = barrack.makeUnit(builder);
+
+  makeUnit.attack();
+  makeUnit.defence();
+}
 ```
