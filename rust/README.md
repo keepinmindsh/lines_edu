@@ -149,3 +149,8 @@
 - [Other uses of ?](https://doc.rust-lang.org/stable/rust-by-example/error/multiple_error_types/reenter_question_mark.html)
 - [Wrapping errors](https://doc.rust-lang.org/stable/rust-by-example/error/multiple_error_types/wrap_error.html)
 - [iter_result](https://doc.rust-lang.org/stable/rust-by-example/error/iter_result.html)
+
+
+# UseCases 
+
+- [Contants]()
