@@ -153,4 +153,4 @@
 
 # UseCases 
 
-- [Contants]()
+- [Constants](https://github.com/keepinmindsh/lines_edu/blob/main/rust/basic/CONSTANTS.md)
