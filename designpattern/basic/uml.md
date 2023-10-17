@@ -25,7 +25,7 @@
 
 - 연관관계 ( Association )
 
-![Association](https://github.com/keepinmindsh/lines_edu/blob/main/assets/association.png)
+![Association](https://github.com/keepinmindsh/lines_edu/blob/main/assets/association.jpg)
 
 클래스 들이 개념 상 서로 연결되었음을 나타낸다. 보통은 한 클래스가 다른 클래스에서 제공하는 기능을 사용하는 상황일 때 표시한다.
 
