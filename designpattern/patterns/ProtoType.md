@@ -348,6 +348,121 @@ public class MarineAction implements UnitAction {
 }
 ```
 
-### Kotlin 에서는 
+### Kotlin 에서는
+
+```kotlin
+package lines.service.usecase
+
+import lines.model.Unit
+import lines.model.UnitAction
+
+class Marine constructor(val unitAction: UnitAction, var mineralCapacity: Int) : Unit {
+    override fun GetMineralCapacity(): Int {
+        return this.mineralCapacity
+    }
+
+    override fun SetMineralCapacity(accumulateMineral: Int) {
+        this.mineralCapacity = accumulateMineral
+    }
+
+    override fun Harvest() {
+        this.unitAction.Harvest()
+    }
+
+    override fun Attack() {
+        this.unitAction.Attack()
+    }
+
+    override fun Building() {
+        this.unitAction.Building()
+    }
+}
+```
+
+```kotlin
+package lines.service.factory
+
+import lines.model.UnitAction
+import lines.model.Unit
+import lines.service.usecase.Marine
+
+class UnitFactory {
+    companion object {
+        fun CreateUnit(unitAction: UnitAction) : Unit {
+            return Marine(unitAction, 50)
+        }
+    }
+}
+```
+
+```kotlin
+package lines.service.domain
+
+import lines.model.UnitAction
+
+class MarineAction : UnitAction {
+    override fun Harvest() {
+        print("수락합니다.")
+    }
+
+    override fun Attack() {
+        print("공격합니다.")
+    }
+
+    override fun Building() {
+        print("건설합니다.")
+    }
+}
+```
+
+```kotlin
+package lines.model
+
+interface Building {
+    fun CreateUnit()
+}
+
+package lines.model
+
+interface Unit {
+    fun GetMineralCapacity(): Int
+    fun SetMineralCapacity(accumulateMineral: Int)
+
+    fun Harvest()
+    fun Attack()
+    fun Building()
+}
+
+package lines.model
+
+interface UnitAction {
+    fun Harvest()
+    fun Attack()
+    fun Building()
+}
+```
+
+
+```kotlin
+package lines.application
+
+import lines.service.domain.MarineAction
+import lines.service.factory.UnitFactory
+
+fun main(){
+    val marineAction = MarineAction()
+
+    for (i in 1..30) {
+        val createUnit = UnitFactory.CreateUnit(marineAction)
+
+        createUnit.Attack()
+
+        createUnit.Building()
+
+        createUnit.Harvest()
+    }
+
+}
+```
 
 ### Dart 에서는 
