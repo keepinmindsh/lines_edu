@@ -216,6 +216,138 @@ type (
 
 ### Java 에서는 
 
+```java 
+package lines.model;
+
+public interface Building {
+    Unit CreateUnit();
+}
+
+package lines.model;
+
+public interface Unit {
+    int GerMineralCapacity();
+    void SetMineralCapacity(int accumulatedMineral);
+
+    void Harvest();
+    void Attack();
+    void Building();
+}
+
+package lines.model;
+
+public interface UnitAction {
+    void Harvest();
+    void Attack();
+    void Building();
+}
+```
+
+```java 
+package application;
+
+import lines.model.Unit;
+import lines.model.UnitAction;
+import lines.service.domain.MarineAction;
+import lines.service.factory.UnitFactory;
+
+public class Application {
+    public static void main(String[] args) {
+        UnitAction unitAction = new MarineAction();
+
+        for (int i = 0; i < 60; i++) {
+            Unit unit = UnitFactory.CreateUnit(unitAction);
+
+            unit.Attack();
+
+            unit.Building();
+
+            unit.Harvest();
+        }
+    }
+}
+```
+
+```java 
+package lines.service.usecase;
+
+import lines.model.Unit;
+import lines.model.UnitAction;
+
+public class Marine implements Unit {
+
+    private final UnitAction unitAction;
+    private int accumulatedMineral;
+
+    public Marine(UnitAction unitAction){
+        this.unitAction = unitAction;
+    }
+
+    @Override
+    public int GerMineralCapacity() {
+        return accumulatedMineral;
+    }
+
+    @Override
+    public void SetMineralCapacity(int accumulatedMineral) {
+        this.accumulatedMineral = accumulatedMineral;
+    }
+
+    @Override
+    public void Harvest() {
+        this.unitAction.Harvest();
+    }
+
+    @Override
+    public void Attack() {
+        this.unitAction.Attack();
+    }
+
+    @Override
+    public void Building() {
+        this.unitAction.Building();
+    }
+}
+```
+
+```java 
+package lines.service.factory;
+
+import lines.model.Unit;
+import lines.model.UnitAction;
+import lines.service.usecase.Marine;
+
+public class UnitFactory {
+
+    public static Unit CreateUnit(UnitAction action) {
+        return new Marine(action);
+    }
+}
+```
+
+```java 
+package lines.service.domain;
+
+import lines.model.UnitAction;
+
+public class MarineAction implements UnitAction {
+    @Override
+    public void Harvest() {
+        System.out.println("수확합니다.");
+    }
+
+    @Override
+    public void Attack() {
+        System.out.println("공격합니다.");
+    }
+
+    @Override
+    public void Building() {
+        System.out.println("건설합니다.");
+    }
+}
+```
+
 ### Kotlin 에서는 
 
 ### Dart 에서는 
