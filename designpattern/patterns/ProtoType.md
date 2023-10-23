@@ -1,4 +1,4 @@
-# Pattern - Builder 
+# Pattern - ProtoType 
 
 ## Basic Information
 
