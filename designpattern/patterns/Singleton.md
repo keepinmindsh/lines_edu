@@ -163,6 +163,8 @@ public class Singleton {
 }  
 ```
 
+![Generalization](https://github.com/keepinmindsh/lines_edu/blob/main/assets/thread_problem.png)
+
 - 위의 Singleton 예제의 문제점
   - 스레드 1이 instance()를 호출하고 4번째 줄을 검사하고 있다. 그런데 다음 줄로 넘어가기 전에 클록 틱에 의해 선점되었다.
   - 스레드 2가 instance()를 호출하고 메소드 전체를 실행한다. 인스턴스가 생성되었다.
