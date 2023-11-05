@@ -18,18 +18,116 @@
 
 ![adapter_pattern_01](https://github.com/keepinmindsh/lines_edu/blob/main/assets/adapter_pattern01.png)
 
-- Target : 사용자가 사용할 응용 분야에 종속적인 인터페이스를 정의하는 클래스
-  - 
+- Target : 사용자가 사용할 응용 분야에 종속적인 인터페이스를 정의하는 클래스 
 - Client : Target 인터페이스를 만족하는 객체와 동작할 대상을 처리
-  - 실제 사용하게 되는 호출 객체/사용자
 - Adaptee : 인터페이스의 적응이 필요한 기존 인터페이스를 정의하는 클래스
-  - 
 - Adapter : Target 인터페이스에 Adaptee의 인터페이스를 적응시키는 클래스
-
 
 ![adapter_pattern_02](https://github.com/keepinmindsh/lines_edu/blob/main/assets/adapter_pattern02.png)
 
+- Adapter 클래스는 하나만 존재해도 수많은 Adaptee 클래스 등과 동작할 수 있다. 
+- Adapter 객체가 포함하는 Adaptee에 대한 참조자는 Adaptee의 인스턴스를 관리할 수도 있고, Adaptee 클래스를 상속받는 다른 서브 클래스들의 인스턴스도 관리할 수 있다. 그러므로 하나의 Adapter 클래스로 모든 Adaptee 클래스와 이를 상속 받는 서브클래스 모두를 이용할 수 있게 된다.
+
 ## 실생활에서의 사용 예시 
+
+### Golang 에서는
+
+```go 
+package domain
+
+type (
+	V110ElectricAdapter interface {
+		UseElectric()
+	}
+	V220ElectricAdapter interface {
+		UseElectric()
+	}
+)
+```
+
+```fo 
+package usecases
+
+import (
+	"adapter/domain"
+	"fmt"
+)
+
+type V110 struct {
+}
+
+func (v V110) UseElectric() {
+	fmt.Println("110 볼트의 전기 제품을 사용할 수 있습니다.")
+}
+
+func NewV110() domain.V110ElectricAdapter {
+	return &V110{}
+}
+```
+
+
+```go 
+package usecases
+
+import (
+	"adapter/domain"
+	"fmt"
+)
+
+type V220 struct {
+}
+
+func (v V220) UseElectric() {
+	fmt.Println("220 볼트의 전기 제품을 사용할 수 있습니다.")
+}
+
+func NewV220() domain.V220ElectricAdapter {
+	return &V220{}
+}
+```
+
+```go 
+package usecases
+
+import (
+	"adapter/domain"
+	"fmt"
+)
+
+type VoltageAdapter struct {
+	Adapter domain.V220ElectricAdapter
+}
+
+func NewVoltageAdapter(v220 domain.V220ElectricAdapter) domain.V110ElectricAdapter {
+	return &VoltageAdapter{Adapter: v220}
+}
+
+func (v VoltageAdapter) UseElectric() {
+
+	fmt.Println("V110 볼트의 전압을 V220의 기기를 사용할 수 있게 전압을 조정합니다. ")
+
+	v.Adapter.UseElectric()
+}
+```
+
+
+```go 
+package main
+
+import "adapter/app/usecases"
+
+func main() {
+
+	v110 := usecases.NewV110()
+	v110.UseElectric()
+
+	v220 := usecases.NewV220()
+	v220.UseElectric()
+
+	adapter := usecases.NewVoltageAdapter(v220)
+	adapter.UseElectric()
+}
+```
 
 ### Java 에서는 
 
