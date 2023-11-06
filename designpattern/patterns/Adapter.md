@@ -28,6 +28,8 @@
 - Adapter 클래스는 하나만 존재해도 수많은 Adaptee 클래스 등과 동작할 수 있다. 
 - Adapter 객체가 포함하는 Adaptee에 대한 참조자는 Adaptee의 인스턴스를 관리할 수도 있고, Adaptee 클래스를 상속받는 다른 서브 클래스들의 인스턴스도 관리할 수 있다. 그러므로 하나의 Adapter 클래스로 모든 Adaptee 클래스와 이를 상속 받는 서브클래스 모두를 이용할 수 있게 된다.
 
+> [UML 이해하기](https://github.com/keepinmindsh/lines_edu/blob/main/designpattern/basic/uml.md)
+
 ## 실생활에서의 사용 예시 
 
 ### Golang 에서는
