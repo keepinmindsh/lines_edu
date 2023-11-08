@@ -42,3 +42,12 @@
 #### 객체지향 설계 5대 법칙 ( SOLID ) 
 
 #### Clean Code 
+
+### 활용 사례를 정리해보면, 
+
+- Abstract Factory 
+- Factory Method 
+- Builder 
+- Prototype 
+- Singleton 
+- Adapter 
