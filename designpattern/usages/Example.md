@@ -21,5 +21,7 @@ Content :
 ```
 
 
-- http://localhost:8080/hello.
+- http://localhost:8080/hello.png 호출시 
+
+hello.png 파일이 다운로드 되어야 한다. 
 
