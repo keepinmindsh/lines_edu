@@ -18,8 +18,17 @@ Chrome 화면 내에 Hello World가 표시되어야 한다. hello.do 호출 시 
 ```
 Path : /webapps/view/hello.html   
 Content :     
-```
 
+<html>
+    <head>
+    
+    </head>
+    <body>
+        Hello World! 
+    </body>
+</html>
+
+```
 
 - http://localhost:8080/hello.png 호출시 
 
