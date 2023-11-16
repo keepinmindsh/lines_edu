@@ -22,6 +22,67 @@
 
 ## 실생활에서 활용해보면, 
 
+### Go 에서는 
+
+객체의 생성시점에 정해진 역할에 의해서 프로세스가 동작한다.   
+
+**개발자**는 어떤 API로 개발을 할 수 있기 때문에, 필요한 상황에 따라서 API를 받아서 사용할 수 있게 된다.   
+
+```go 
+package designpattern
+
+import "testing"
+
+func Test_BridgeCall(t *testing.T) {
+	developer := NewHowardDeveloper(NewHanabankAPI())
+
+	developer.DevelopWithdrawProcess()
+}
+```
+
+```go 
+package designpattern
+
+type (
+	BankAPI interface {
+		Withdraw()
+	}
+
+	Developer interface {
+		DevelopWithdrawProcess()
+	}
+)
+
+
+type KookminbankAPI struct{}
+
+func (k KookminbankAPI) Withdraw() {}
+
+func NewKookminbankAPI() BankAPI {
+	return &KookminbankAPI{}
+}
+
+type HanabankAPI struct{}
+
+func (h HanabankAPI) Withdraw() {}
+
+func NewHanabankAPI() BankAPI {
+	return &HanabankAPI{}
+}
+
+type Howard struct {
+	BankAPI
+}
+
+func (h Howard) DevelopWithdrawProcess() {
+
+}
+
+func NewHowardDeveloper(bankAPI BankAPI) Developer {
+	return &Howard{bankAPI}
+}
+```
+
 ### Java 에서는 
 
 아래의 코드가 만약 패턴이 적용되지 않은 상태에서 모든 코드를 작성해야 했다면, 
