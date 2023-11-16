@@ -186,7 +186,43 @@ class APIDeveloper implements Developer
 }
 ```
 
+### Kotlin 에서는 
 
+```kotlin 
+package sample
+
+interface BankAPI {
+    fun Withdraw()
+}
+
+interface Developer {
+    fun DevelopWithdrawProcess()
+}
+
+class KookminBankAPI : BankAPI {
+    override fun Withdraw() {
+    }
+}
+
+class HanaBankAPI : BankAPI {
+    override fun Withdraw() {
+    }
+}
+
+class Howard(val bankAPI: BankAPI) : Developer {
+    override fun DevelopWithdrawProcess() {
+        bankAPI.Withdraw()
+    }
+}
+
+class Bridge {
+    open fun DevelopBank(){
+        val developer = Howard(KookminBankAPI())
+
+        developer.DevelopWithdrawProcess()
+    }
+}
+```
 
 ## Terms 
 
