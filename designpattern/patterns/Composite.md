@@ -333,3 +333,117 @@ public class Leaf4 extends Component {
     }
 }
 ```
+
+### Kotlin 에서는 
+
+```kotlin 
+package sample
+
+fun main() {
+    val picture = Picture()
+
+    picture.Add(Line())
+    val rectangle = Rectangle()
+    rectangle.Add(Line())
+    rectangle.Add(Line())
+    rectangle.Add(Line())
+    rectangle.Add(Line())
+    picture.Add(rectangle)
+    picture.Add(Line())
+    picture.Add(Text())
+    picture.Add(Line())
+    picture.Add(Rectangle())
+
+    picture.Draw()
+}
+```
+
+```kotlin
+package sample
+
+interface Graphics {
+    fun Draw()
+    fun Add(element: Graphics)
+    fun Remove(element: Graphics)
+}
+
+class Line : Graphics {
+    private var graphics: ArrayList<Graphics> = ArrayList()
+
+    override fun Draw() {
+        for (item in graphics) {
+            item.Draw()
+        }
+
+        println("선을 그립니다.")
+    }
+
+    override fun Add(element: Graphics) {
+        graphics.add(element)
+    }
+
+    override fun Remove(element: Graphics) {
+        graphics.remove(element)
+    }
+}
+
+class Rectangle : Graphics {
+    private var graphics: ArrayList<Graphics> = ArrayList()
+
+    override fun Draw() {
+        for (item in graphics) {
+            item.Draw()
+        }
+
+        println("사각형을 그립니다.")
+    }
+
+    override fun Add(element: Graphics) {
+        graphics.add(element)
+    }
+
+    override fun Remove(element: Graphics) {
+        graphics.remove(element)
+    }
+}
+
+class Text : Graphics {
+    private var graphics: ArrayList<Graphics> = ArrayList()
+
+    override fun Draw() {
+        for (item in graphics) {
+            item.Draw()
+        }
+
+        println("글자를 그립니다.")
+    }
+
+    override fun Add(element: Graphics) {
+        graphics.add(element)
+    }
+
+    override fun Remove(element: Graphics) {
+        graphics.remove(element)
+    }
+}
+
+class Picture : Graphics {
+    private var graphics: ArrayList<Graphics> = ArrayList()
+
+    override fun Draw() {
+        for ( item in graphics ) {
+            item.Draw()
+        }
+
+        println("각 그림을 그리는 것을 완료했습니다.")
+    }
+
+    override fun Add(element: Graphics) {
+        graphics.add(element)
+    }
+
+    override fun Remove(element: Graphics) {
+        graphics.remove(element)
+    }
+}
+```
