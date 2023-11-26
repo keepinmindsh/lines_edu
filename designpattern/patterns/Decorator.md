@@ -43,6 +43,99 @@
 
 ## 실생활 예제 
 
+### Go 에서는 
+
+```go 
+package main
+
+import (
+	"authorized_user/app/usecase"
+	"fmt"
+)
+
+func main() {
+	uCase := usecase.NewUserAuthUCase(usecase.NewUser())
+
+	user := uCase.GetAuthorizedUser()
+	
+	fmt.Println(user)
+}
+```
+
+```go 
+package domain
+
+type (
+	UserModel struct {
+		UserId   string
+		UserName string
+		Tel      string
+		Address  string
+		Role     string ``
+	}
+
+	User interface {
+		GetUser() []UserModel
+	}
+
+	AuthorizedUser interface {
+		GetAuthorizedUser() []UserModel
+	}
+)
+```
+
+
+```go 
+package usecase
+
+import "authorized_user/domain"
+
+type UserUCase struct {
+}
+
+func NewUser() *UserUCase {
+	return &UserUCase{}
+}
+
+func (u UserUCase) GetUser() []domain.UserModel {
+	//TODO implement me
+	panic("implement me")
+}
+```
+
+```go 
+package usecase
+
+import (
+	"authorized_user/domain"
+	"github.com/samber/lo"
+)
+
+type UserAuthUCase struct {
+	user domain.User
+}
+
+func NewUserAuthUCase(user domain.User) domain.AuthorizedUser {
+	return &UserAuthUCase{
+		user: user,
+	}
+}
+
+func (u UserAuthUCase) GetAuthorizedUser() []domain.UserModel {
+
+	userList := u.user.GetUser()
+
+	filter := lo.Filter(userList, func(item domain.UserModel, index int) bool {
+		return checkRole(item.Role)
+	})
+
+	return filter
+}
+
+func checkRole(role string) bool {
+	return role == "admin"
+}
+```
 
 ### Java 에서는 
 
