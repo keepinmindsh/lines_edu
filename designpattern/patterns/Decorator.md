@@ -45,6 +45,8 @@
 
 ### Go 에서는 
 
+기존의 존재하는 기능에 대해서 추가 기능으로 인한 영향도가 생기지 않도록 추가 기능을 별도로 구현하고, 기존 기존을 가지는 객체를 주입하여 활용하는 방식이다.
+
 ```go 
 package main
 
@@ -71,7 +73,7 @@ type (
 		UserName string
 		Tel      string
 		Address  string
-		Role     string ``
+		Role     string 
 	}
 
 	User interface {
@@ -260,6 +262,58 @@ public class LongRange extends UpgradeDecorator {
 
     public void applyLongRange(){
         System.out.println("공격 사거리가 10 증가하였습니다.");
+    }
+}
+```
+
+### Kotlin 에서는 
+
+```kotlin 
+package lines
+
+fun main() {
+    val switAdmin = SwitAdmin(SwitUser())
+
+    val authorizedUser = switAdmin.GetAuthorizedUser()
+
+    print(authorizedUser)
+}
+
+data class UserModel(
+    val UserId: String,
+    val UserName: String,
+    var Tel: String,
+    var Address: String,
+    var Role: String
+)
+
+interface User {
+    fun GetUser(): List<UserModel>
+}
+
+interface AuthrizedUser {
+    fun GetAuthorizedUser(): List<UserModel>
+}
+
+
+class SwitUser: User {
+    override fun GetUser(): List<UserModel> {
+        return ArrayList<UserModel>()
+    }
+}
+
+class SwitAdmin(val user: User) : AuthrizedUser {
+    override fun GetAuthorizedUser(): List<UserModel> {
+
+        val userList = user.GetUser()
+
+        val filterUserList = userList.filter { item -> checkRole(item.Role) }
+
+        return filterUserList
+    }
+
+    private fun checkRole(role:String): Boolean {
+        return role == "Admin"
     }
 }
 ```
