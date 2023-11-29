@@ -42,3 +42,9 @@ Content :
 
 hello.png 파일이 다운로드 되어야 한다. 
 
+## 요구사항 확장 ( 1차 )
+
+- HTTP Method 인 Get/Post/Put/Delete 를 받을 수 있도록 구현한다.
+  - Server가 기동될 때 URL과 실행될 메소드를 등록할 수 있는 Route Handler를 구현한다. 
+- HTTP Request Header 를 분석할 수 있는 Parser 를 구현한다. 
+- Content-Type 에 따라서 요청의 파라미터 를 Parsing 하는 로직을 구현한다. 
