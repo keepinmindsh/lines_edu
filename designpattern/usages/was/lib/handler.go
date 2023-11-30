@@ -14,6 +14,7 @@ type handler struct {
 	StringViewResolver domain.ViewResolver
 	JsonViewResolver   domain.ViewResolver
 	FileViewResolver   domain.ViewResolver
+	HttpViewResolver   domain.ViewResolver
 }
 
 func NewHandler(options ...func(config *handler)) domain.ServletHandler {
@@ -26,24 +27,31 @@ func NewHandler(options ...func(config *handler)) domain.ServletHandler {
 		StringViewResolver: svr.StringViewResolver,
 		JsonViewResolver:   svr.JsonViewResolver,
 		FileViewResolver:   svr.FileViewResolver,
+		HttpViewResolver:   svr.HttpViewResolver,
 	}
 }
 
-func WithStringView(get domain.ViewResolver) func(*handler) {
+func WithStringView(resolver domain.ViewResolver) func(*handler) {
 	return func(h *handler) {
-		h.StringViewResolver = get
+		h.StringViewResolver = resolver
 	}
 }
 
-func WithJsonView(post domain.ViewResolver) func(*handler) {
+func WithJsonView(resolver domain.ViewResolver) func(*handler) {
 	return func(h *handler) {
-		h.JsonViewResolver = post
+		h.JsonViewResolver = resolver
 	}
 }
 
-func WithFileView(io domain.ViewResolver) func(*handler) {
+func WithFileView(resolver domain.ViewResolver) func(*handler) {
 	return func(h *handler) {
-		h.FileViewResolver = io
+		h.FileViewResolver = resolver
+	}
+}
+
+func WithHttpView(resolver domain.ViewResolver) func(*handler) {
+	return func(h *handler) {
+		h.HttpViewResolver = resolver
 	}
 }
 
@@ -73,7 +81,10 @@ func (h handler) Do(conn net.Conn) {
 				Data: "Hello World!",
 			})
 		} else if path == "/hello.do" {
-
+			h.HttpViewResolver.Resolve(domain.ViewResolverConfig{
+				Conn: conn,
+				Data: nil,
+			})
 		} else if path == "/hello.png" {
 			h.FileViewResolver.Resolve(domain.ViewResolverConfig{
 				Conn: conn,

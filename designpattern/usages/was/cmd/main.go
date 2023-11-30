@@ -21,6 +21,7 @@ func main() {
 		lib.WithStringView(lib.NewStringView()),
 		lib.WithJsonView(lib.NewJsonView()),
 		lib.WithFileView(lib.NewFileView()),
+		lib.WithHttpView(lib.NewHttpView()),
 	)
 
 	lib.NewServlet(handler.Do, listener)
