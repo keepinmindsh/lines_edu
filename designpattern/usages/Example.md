@@ -42,6 +42,12 @@ Content :
 
 hello.png 파일이 다운로드 되어야 한다. 
 
+## 향후 우리가 만들어 나갈 구조 
+
+![Spring Dispatcher Servlet](https://github.com/keepinmindsh/lines_edu/blob/main/assets/spring-dispatcher-servlet.png)
+
+**Servlet** : 클라이언트의 요청을 처리하고, 그 결과를 반환하는 Servlet 클래스의 구현 규칙을 지킨 자바 웹 프로그래밍 기술
+
 ## 요구사항 확장 ( 1차 )
 
 - HTTP Method 인 Get/Post/Put/Delete 를 받을 수 있도록 구현한다.
