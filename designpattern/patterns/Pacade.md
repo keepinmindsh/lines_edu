@@ -25,6 +25,9 @@
     - 예약 시점에서 예약 확정을 클릭시 이후 내부에서 발생되는 모든 프로세스를 하나의 기능으로 표현할 수 있다
     - 채팅 시스템에서 메세지 생성 함수 호출 이후 발생해야하는 내부 기능은 호출하는 입장에서는 MessageCreate로 이해하는 것이 좋다.
 
+
+### 예약 시스템의 예약을 Pacade로 구성한다면,
+
 ![Pacade Pattern](https://github.com/keepinmindsh/lines_edu/blob/main/assets/pacade_pattern.png)
 
 
