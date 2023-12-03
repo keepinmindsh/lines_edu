@@ -17,6 +17,146 @@
 
 ## 실생활 예제 
 
+### Go 에서는 
+
+```go 
+package main
+
+import (
+	"compiler/app/builder"
+	"compiler/app/compiler"
+	"compiler/app/element"
+)
+
+func main() {
+	compilerBuilder := builder.NewCompilerBuilder()
+
+	compilerBuilder.Parser(element.NewParser())
+	compilerBuilder.Scanner(element.NewScanner())
+	compilerBuilder.ProgramNode(element.NewNode())
+
+	compiler := compiler.NewCompiler(compilerBuilder)
+
+	compiler.Compile()
+}
+```
+
+```go 
+package domain
+
+type Compiler interface {
+	Compile()
+}
+
+type Element interface {
+	Process()
+}
+
+```
+
+```go 
+package builder
+
+import "compiler/domain"
+
+type CompilerElement struct {
+	scanElement        domain.Element
+	parserElement      domain.Element
+	programNodeElement domain.Element
+}
+
+func NewCompilerBuilder() *CompilerElement {
+	return &CompilerElement{}
+}
+
+func (c *CompilerElement) Scanner(element domain.Element) *CompilerElement {
+	c.scanElement = element
+	return c
+}
+
+func (c *CompilerElement) Parser(element domain.Element) *CompilerElement {
+	c.parserElement = element
+	return c
+}
+
+func (c *CompilerElement) ProgramNode(element domain.Element) *CompilerElement {
+	c.programNodeElement = element
+	return c
+}
+
+func (c *CompilerElement) GetScanner() domain.Element {
+	return c.scanElement
+}
+
+func (c *CompilerElement) GetParser() domain.Element {
+	return c.parserElement
+}
+
+func (c *CompilerElement) GetProgramNode() domain.Element {
+	return c.programNodeElement
+}
+```
+
+```go 
+package element
+
+import (
+	"compiler/domain"
+	"fmt"
+)
+
+type Node struct {
+}
+
+func (n Node) Process() {
+	fmt.Println("Loading node is processing")
+}
+
+func NewNode() domain.Element {
+	return &Node{}
+}
+```
+
+```go
+package element
+
+import (
+	"compiler/domain"
+	"fmt"
+)
+
+type Parser struct {
+}
+
+func (p Parser) Process() {
+	fmt.Println("Parser is processing")
+}
+
+func NewParser() domain.Element {
+	return &Parser{}
+}
+```
+
+```go 
+package element
+
+import (
+	"compiler/domain"
+	"fmt"
+)
+
+type Scanner struct {
+}
+
+func (s Scanner) Process() {
+	fmt.Println("Scan is processing")
+}
+
+func NewScanner() domain.Element {
+	return &Scanner{}
+}
+```
+
 ### Java 에서는 
 
 ```java 
@@ -209,6 +349,119 @@ class JVMComponent {
         }
 
         return null;
+    }
+}
+```
+
+### Kotlin 에서는 
+
+- Compiler 실행
+
+```kotlin 
+package lines
+
+import lines.builder.CompilerBuilder
+import lines.compiler.JavaCompiler
+import lines.compiler.Node
+import lines.compiler.Parser
+import lines.compiler.Scanner
+import lines.domain.Compiler
+
+fun main() {
+    val compiler : Compiler = JavaCompiler(CompilerBuilder(
+        Node(),
+        Parser(),
+        Scanner(),
+    ))
+
+    compiler.Compile()
+}
+```
+
+- Compiler 빌더 ( Pacade 구현 용도 )
+
+```kotlin
+package lines.builder
+
+import lines.domain.Element
+
+data class CompilerBuilder (
+    var parser: Element,
+    var scanner: Element,
+    var node: Element
+)
+```
+
+- 도메인 정의 
+
+```kotlin
+package lines.domain
+
+interface Compiler {
+    fun Compile()
+}
+```
+
+```kotlin
+package lines.domain
+
+interface Element {
+    fun Process()
+}
+```
+
+- Compiler ( Pacade ) 구현체 
+
+```kotlin 
+package lines.compiler
+
+import lines.builder.CompilerBuilder
+
+class JavaCompiler(var compiler: CompilerBuilder) : lines.domain.Compiler {
+    override fun Compile() {
+        compiler.node.Process()
+
+        compiler.parser.Process()
+
+        compiler.scanner.Process()
+    }
+}
+```
+
+- Compiler 요소 구현제 
+
+```kotlin
+package lines.compiler
+
+import lines.domain.Element
+
+class Node : Element {
+    override fun Process() {
+        println("Node is processing")
+    }
+}
+```
+
+```kotlin 
+package lines.compiler
+
+import lines.domain.Element
+
+class Parser : Element {
+    override fun Process() {
+        println("Parser is processing")
+    }
+}
+```
+
+```kotlin
+package lines.compiler
+
+import lines.domain.Element
+
+class Scanner : Element {
+    override fun Process() {
+        println("Scanner is processing")
     }
 }
 ```
