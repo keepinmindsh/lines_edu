@@ -1,4 +1,4 @@
-~~# Pattern - Flyweight
+# Pattern - Flyweight
 
 ## Basic Information
 
