@@ -28,6 +28,193 @@
 
 ## 실제로 활용해보면, 
 
+### Golang 에서는 
+
+```go 
+package main
+
+import (
+	"excel_sheet/app/usecase"
+	"excel_sheet/domain"
+	"excel_sheet/domain/position"
+	"fmt"
+)
+
+func main() {
+
+	var text domain.Text
+	for i := 0; i < 5; i++ {
+		text = usecase.GetText(domain.A)
+
+		cell := usecase.NewCell(&position.Position{
+			X: i,
+			Y: i,
+		}, &text)
+
+		print(fmt.Sprintf("Cell Address : %v   ", &cell))
+
+		cell.Draw()
+	}
+}
+```
+
+```go 
+package usecase
+
+import (
+	"excel_sheet/domain"
+	"excel_sheet/domain/position"
+	"fmt"
+)
+
+type Cell struct {
+	Position *position.Position
+	Text     *domain.Text
+}
+
+func NewCell(position *position.Position, text *domain.Text) domain.Cell {
+	c := &Cell{
+		Position: position,
+		Text:     text,
+	}
+
+	return c
+}
+
+func (c *Cell) Draw() {
+	if c.Text != nil {
+
+		print(fmt.Sprintf(" Text: Address - %v   ", &(*c.Text)))
+		print(fmt.Sprintf(" Text: Pointer Address - %v   ", &c.Text))
+
+		(*c.Text).Draw()
+	}
+}
+```
+
+```go 
+package usecase
+
+import "excel_sheet/domain"
+
+type a struct{}
+
+func (a a) Draw() {
+	print("  A \r\n")
+}
+
+type b struct{}
+
+func (b b) Draw() {
+	print("  B \n")
+}
+
+type c struct{}
+
+func (c c) Draw() {
+	print("  C \n")
+}
+
+type d struct{}
+
+func (d d) Draw() {
+	print("  D \n")
+}
+
+type e struct{}
+
+func (e e) Draw() {
+	print("  E \n")
+}
+
+var TextA domain.Text
+var TextB domain.Text
+var TextC domain.Text
+var TextD domain.Text
+var TextE domain.Text
+
+func GetText(txtType domain.TextType) domain.Text {
+	switch txtType {
+	case domain.A:
+		if TextA != nil {
+			return TextA
+		} else {
+			TextA = a{}
+			return TextA
+		}
+	case domain.B:
+		if TextB != nil {
+			return TextB
+		} else {
+			TextB = b{}
+			return TextB
+		}
+	case domain.C:
+		if TextC != nil {
+			return TextC
+		} else {
+			TextC = c{}
+			return TextC
+		}
+	case domain.D:
+		if TextD != nil {
+			return TextD
+		} else {
+			TextD = d{}
+			return TextD
+		}
+	case domain.E:
+		if TextE != nil {
+			return TextE
+		} else {
+			TextE = e{}
+			return TextE
+		}
+	default:
+		return nil
+	}
+}
+```
+
+```go 
+package position
+
+type Position struct {
+	X int
+	Y int
+}
+```
+
+```go 
+package domain
+
+type (
+	Cell interface {
+		Draw()
+	}
+
+	Text interface {
+		Draw()
+	}
+)
+
+type TextType string
+
+const (
+	A TextType = "A"
+	B TextType = "B"
+	C TextType = "C"
+	D TextType = "D"
+	E TextType = "E"
+)
+
+func (t TextType) String() string {
+	return string(t)
+}
+```
+
+### Java 에서는 
+
 ```java 
 package designpattern.gof_flyweight.sample01;
 
