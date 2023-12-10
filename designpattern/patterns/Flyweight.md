@@ -23,7 +23,7 @@
 - 부가적인 속성들을 제거한 후 객체들을 조사해보니 객체의 많은 묶음이 비교적 적은 수의 공유된 객체로 대체될 수 있을 때. 현재 서로 다른 객체로 간주한 이유는 이들 부가적인 속성 때문이었지 본질이 달라던 것은 아닐 때,
 - 응용 프로그램이 객체의 정체성에 의존하지 않을 때. 플라이급 객체들은 공유될 수 있음을 의미하는데, 식별자가 있다는 것은 서로 다른 객체로 구별해야한다는 의미이므로 플라이급 객체를 사용할 수 없습니다.
 
-![Flyweight](https://github.com/keepinmindsh/lines_edu/blob/main/assets/flyweight.jpg)
+![Flyweight](https://github.com/keepinmindsh/lines_edu/blob/main/assets/flyweight.png)
 
 
 ## 실제로 활용해보면, 
