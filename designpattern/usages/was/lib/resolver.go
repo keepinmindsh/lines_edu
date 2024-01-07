@@ -9,6 +9,14 @@ import (
 	"strings"
 )
 
+type ResolverType string
+
+const (
+	StringView    ResolverType = "StringViewResolver"
+	JsonView      ResolverType = "JsonViewResolver"
+	MultiPartView ResolverType = "MultiPartView"
+)
+
 type get struct{}
 
 func (g get) Resolve(param domain.ViewResolverConfig) {
@@ -103,7 +111,7 @@ func (i fileIo) Resolve(param domain.ViewResolverConfig) {
 	}
 }
 
-func NewFileView() domain.ViewResolver {
+func NewMultiPartView() domain.ViewResolver {
 	return &fileIo{}
 }
 

@@ -17,12 +17,11 @@ func main() {
 		panic(err)
 	}
 
-	handler := lib.NewHandler(
-		lib.WithStringView(lib.NewStringView()),
-		lib.WithJsonView(lib.NewJsonView()),
-		lib.WithFileView(lib.NewFileView()),
-		lib.WithHttpView(lib.NewHttpView()),
-	)
+	servlet := lib.NewServlet(lib.SettingResolver(map[lib.ResolverType]domain.ViewResolver{
+		lib.JsonView:      lib.NewJsonView(),
+		lib.StringView:    lib.NewStringView(),
+		lib.MultiPartView: lib.NewMultiPartView(),
+	}))
 
-	lib.NewServlet(handler.Do, listener)
+	lib.NewServer(servlet.Exec, listener)
 }

@@ -17,7 +17,7 @@ type handler struct {
 	HttpViewResolver   domain.ViewResolver
 }
 
-func NewHandler(options ...func(config *handler)) domain.ServletHandler {
+func NewResolver(options ...func(config *handler)) domain.ServletHandler {
 	svr := &handler{}
 	for _, o := range options {
 		o(svr)

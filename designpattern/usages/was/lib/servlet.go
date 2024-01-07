@@ -1,21 +1,35 @@
 package lib
 
 import (
-	"fmt"
+	"design_patterns/domain"
 	"net"
 )
 
-type servlet struct {
+type Servlet interface {
+	Exec(conn net.Conn)
 }
 
-func NewServlet(handleRequest func(conn net.Conn), listener net.Listener) {
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			fmt.Println("Error accepting connection:", err)
-			continue
-		}
+type servlet struct {
+	ViewResolver map[ResolverType]domain.ViewResolver
+}
 
-		go handleRequest(conn)
+func (s servlet) Exec(conn net.Conn) {
+
+}
+
+func NewServlet(options ...func(config *servlet)) Servlet {
+	svr := &servlet{}
+	for _, o := range options {
+		o(svr)
+	}
+
+	return &servlet{
+		ViewResolver: svr.ViewResolver,
+	}
+}
+
+func SettingResolver(resolver map[ResolverType]domain.ViewResolver) func(*servlet) {
+	return func(h *servlet) {
+		h.ViewResolver = resolver
 	}
 }

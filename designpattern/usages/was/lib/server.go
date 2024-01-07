@@ -35,3 +35,15 @@ func (l listener) Listen(options ...func(config *domain.ListenerConfig)) (net.Li
 
 	return listener, nil
 }
+
+func NewServer(handleRequest func(conn net.Conn), listener net.Listener) {
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Println("Error accepting connection:", err)
+			continue
+		}
+
+		go handleRequest(conn)
+	}
+}
