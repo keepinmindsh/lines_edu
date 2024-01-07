@@ -98,6 +98,16 @@ func (h handler) Do(conn net.Conn) {
 			Conn: conn,
 			Data: request,
 		})
+	} else if method == "PUT" {
+		h.JsonViewResolver.Resolve(domain.ViewResolverConfig{
+			Conn: conn,
+			Data: request,
+		})
+	} else if method == "DELETE" {
+		h.JsonViewResolver.Resolve(domain.ViewResolverConfig{
+			Conn: conn,
+			Data: request,
+		})
 	} else {
 		writeErrorResponse(conn, http.StatusMethodNotAllowed)
 	}
