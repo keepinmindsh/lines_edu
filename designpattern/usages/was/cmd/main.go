@@ -21,6 +21,7 @@ func main() {
 		lib.JsonView:      lib.NewJsonView(),
 		lib.StringView:    lib.NewStringView(),
 		lib.MultiPartView: lib.NewMultiPartView(),
+		lib.HttpView:      lib.NewHttpView(),
 	}))
 
 	lib.NewServer(servlet.Exec, listener)

@@ -15,6 +15,7 @@ const (
 	StringView    ResolverType = "StringViewResolver"
 	JsonView      ResolverType = "JsonViewResolver"
 	MultiPartView ResolverType = "MultiPartView"
+	HttpView      ResolverType = "HttpView"
 )
 
 type get struct{}
