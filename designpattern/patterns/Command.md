@@ -10,14 +10,107 @@
 
 ## 동기
 
-항상 그렇지는 않지만, 요청받은 연산이 무엇이며, 이를 처리할 객체가 누구인지에 대한 아무런 정보 없이 임의의 객체에 메세지를 보내야 할 때가 간간이 있습니다.     
-예를 들어, 사용자 인터페이스 툴킷은 버튼, 메뉴 같은 객체를 포함하는데, 이는 사용자의 메세지드를 처리하게 됩니다.     
-그러나 사용자 인터페이스 툴킷은 버튼과 메뉴에서 요청을 처리할 수 없습니다. 툴킷을 사용하는 응용프로그랜만이 어떤 객체를 통해서 어떤 일이 되어야 하는지 알기 때문이다.      
-사용자 인터페이스 툴킷 설계자의 입장에서는 어떤 객체가 이 요청을 처리할 지를 알아낼 방법이 없습니다.   
+항상 그렇지는 않지만, 요청 받은 연산이 무엇 이며, 이를 처리할 객체가 누구 인지에 대한 아무런 정보 없이 임의의 객체에 메세지를 보내야 할 때가 간간이 있습니다.     
+예를 들어, 사용자 인터페이스 툴킷은 버튼, 메뉴 같은 객체를 포함하는데, 이는 사용자의 메세지를 처리하게 됩니다.     
+그러나 사용자 인터페이스 툴킷은 버튼과 메뉴에서 요청을 처리할 수 없습니다. 툴킷을 사용하는 응용프로그램만이 어떤 객체를 통해서 어떤 일이 되어야 하는지 알기 때문입니다.          
+사용자 인터페이스 툴킷 설계자의 입장에서는 어떤 객체가 이 요청을 처리할 지를 알아낼 방법이 없습니다.
 
-## 결과
+## 좀 더 쉽게 풀이 하기
+
+어떤 특정한 작업이 **요청**할 주체가 **누구**인지 명확하게 알 수 없을 때 사용한다. 
+
+![Pacade Pattern](https://github.com/keepinmindsh/lines_edu/blob/main/assets/command_pattern.png)
+
+즉, 처음에는 채널을 통해서 메세지를 보내는 채널 메세지 생성 함수가 있었는데, 다이렉트 메세지를 통해서도 메세지 생성이 필요하게 되었다. 이럴 경우, 
+
+### Channel Message 생성만 존재 했을때, 
+
+```go 
+package main
+
+import "fmt"
+
+func main() {
+	ChannelMessageCreate()
+}
+
+func ChannelMessageCreate() {
+	fmt.Println("채널 메세지를 생성합니다.")
+}
+```
+
+### 만약 DirectMessageCreate 가 생성되는 경우, 
+
+```go
+package main
+
+func main() {
+
+}
+
+type Caller struct {
+	message Message
+}
+
+func NewCaller(msg Message) *Caller {
+	return &Caller{
+		message: msg,
+	}
+}
+
+func (c Caller) ChannelCall() {
+	// 메세지를 전송한다는 명령은 동일하다. 
+	c.message.MessageCreate()
+}
+
+func (c Caller) DirectMessageCall() {
+	// 메세지를 전송한다는 명령은 동일하다.
+	c.message.MessageCreate()
+}
+
+type Message interface {
+	MessageCreate()
+}
+
+type messageCreate struct {
+}
+
+func NewMessage() Message {
+	return &messageCreate{}
+}
+
+// 명령을 수행하는 MessageCreate는 호출 이후의 상태 관리를 자체적으로 수행해야 한다.
+func (m messageCreate) MessageCreate() {
+
+}
+```
+
+### 요청을 수행하는 Command 는 
+
+- Command 내에서 메세지 생성을 위한 연산 및 상태에 대해서 관리 및 처리되어야 한다. 
+  - 예시) 메세지를 생성하다가 실패할 경우, 실패에 대한 RollBack은 Command 객체가 내부에서 처리되어야 한다. 
+    - Method 호출, RPC Call, API 콜 등등 
+
+## Command 패턴에 대해서는
 
 - Command 는 연산을 호출하는 객체와 연산 수행 방법을 구현하는 객체를 분리합니다.
-- Command 는 일급 클래스 입니다. 다른 객체와 같은 방식으로 조작되고 확장할 수 있습니다.
+  - 여기에서 분리의 개념은 단순히 객체로만의 분리가 아닌 
+    - Rest API 
+    - RPC 
+    - Event 기반의 Pub/Sub 
+    - etc
+- Command 는 [일급 클래스](#일급-클래스란) 입니다. 다른 객체와 같은 방식으로 조작되고 확장할 수 있습니다.
 - 명령을 여러 개를 복합해서 복합 명령을 만들 수 있습니다. 앞에서 Macro Command 클래스를 예로 들었지만, 복합체 패턴을 이용하여 여러 명령어를 구성할 수도 있습니다.
 - 새로운 Command 객체를 추가하기 쉽습니다. 기존 클래스를 변경할 필요 없이 단지 새로운 명령어에 대응하는 클래스만 정의하면 됩니다.
+
+
+# Tips
+
+## 일급 클래스란?
+
+다른 객체들에 일반적으로 적용 가능한 연산을 모두 지원하는 객체를 가리킨다, 보통 함수에 인자로 넘기기, 수정하기, 변수에 대인하기와 같은 연산을 지원할 때 일급 객체라고 한다. 
+
+- 객체는 변수나 매개변수에 할당할 수 있다. 
+- 객체는 다른 객체와 동등한 지위를 가진다. 
+- 객체는 반환 값으로 사용할 수 있다. 
+- 객체는 필요한 경우 메서드에서 생성할 수 있다. 
