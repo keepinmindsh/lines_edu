@@ -3,6 +3,7 @@ package main
 import (
 	"design_patterns/domain"
 	"design_patterns/lib"
+	"design_patterns/lib/resolver"
 )
 
 func main() {
@@ -17,12 +18,12 @@ func main() {
 		panic(err)
 	}
 
-	servlet := lib.NewServlet(lib.SettingResolver(map[lib.ResolverType]domain.ViewResolver{
-		lib.JsonView:      lib.NewJsonView(),
-		lib.StringView:    lib.NewStringView(),
-		lib.MultiPartView: lib.NewMultiPartView(),
-		lib.HttpView:      lib.NewHttpView(),
-	}))
+	servlet := lib.NewServletInstance(map[domain.ResolverType]domain.ViewResolver{
+		domain.JsonView:      resolver.NewJsonView(),
+		domain.StringView:    resolver.NewStringView(),
+		domain.MultiPartView: resolver.NewMultiPartView(),
+		domain.HttpView:      resolver.NewHttpView(),
+	})
 
 	lib.NewServer(servlet.Exec, listener)
 }
