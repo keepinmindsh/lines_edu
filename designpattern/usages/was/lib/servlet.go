@@ -18,6 +18,7 @@ func (s servletInstance) Exec(conn net.Conn) {
 	pre, err := s.servlet.Pre(conn)
 
 	if err == nil {
+		// todo localhost:9999/hello.do 등이 실제 내부로 들어오고 난뒤에 동작하지 않음. 코드 체크 필요!
 		s.servlet.Do(pre.Method, pre.Path, "", conn)
 	}
 
