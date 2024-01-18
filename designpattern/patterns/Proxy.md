@@ -25,3 +25,57 @@
 - 기록 시점 복사 : 이 최적화는 요구가 들어올 때만 객체를 생성하는 개념과 관련 있는데, 덩치가 크고 복잡한 객체를 복사하려면 비용이 만만치 않습니다. 만약, 사본이 변경되지 않고 원본과 똑같다면, 굳이 이 비용을 물 필요가 없습니다. 프록시를 사용해서 복사 절차를 미룸으로써, 사본이 수정될 때만 실제 복사 비용을 물게 만드는 것 입니다.
 - 프록시에서 중요한 부분 중의 하나는 흐름제어만 할 뿐 결과 값을 조장하거나 변경시키면 안됩니다.
 
+## 실제로 사용할 수 있는 코드 예시 
+
+### Java 
+
+```java
+
+package DesignPattern.gof_proxy.sample01;
+
+public class OrderMain {
+
+    public static void main(String[] args) throws Exception {
+
+        OrderExecutor orderExecutor = new OrderExecutorProxy();
+
+        orderExecutor.callOrder("커피요청");
+    }
+}
+```
+
+```java 
+package DesignPattern.gof_proxy.sample01;
+
+public interface OrderExecutor {
+    public void callOrder(String requestName) throws Exception;
+}
+
+package DesignPattern.gof_proxy.sample01;
+
+public class CoffeOrder implements OrderExecutor {
+    public void callOrder(String requestName) throws Exception {
+        System.out.println(requestName + " is waiting for receiving result.");
+    }
+}
+
+package DesignPattern.gof_proxy.sample01;
+
+public class OrderExecutorProxy implements OrderExecutor {
+
+    private OrderExecutor orderExecutor;
+
+    public OrderExecutorProxy(){
+        orderExecutor = new CoffeOrder();
+    }
+
+    public void callOrder(String requestName) throws Exception {
+        System.out.println("커피를 요청 하기 위한 사전 작업 진행 !");
+
+        orderExecutor.callOrder(requestName);
+
+        System.out.println("커피를 전달 받아 추가 작업 진행 !");
+    }
+}                                           
+
+```
