@@ -29,3 +29,266 @@
 각 비행기는 관제탑에만 현재 상태를 확인 요청하고, 비행기(객체) 자체의 역할을 수행할 수 있습니다.  
 
 ## 실제 코드로 구현해보면, 
+
+
+- 중재를 위한 상태 객체 정의  
+
+```go 
+package strip
+
+import (
+  "right_airplan/domain"
+)
+
+type strip struct {
+  AirPlanName string
+}
+
+func (s *strip) SetAirPlanName(airPlaneName string) {
+  s.AirPlanName = airPlaneName
+}
+
+func (s *strip) GetAirPlanName() string {
+  return s.AirPlanName
+}
+
+func (s *strip) LandingProcedure() {
+  s.AirPlanName = "RUNNING"
+}
+
+func (s *strip) Complete() {
+  s.AirPlanName = "COMPLETE"
+}
+
+func (s *strip) GetRoadStatus() string {
+  return s.AirPlanName
+}
+
+func NewStrip() domain.Strip {
+  return &strip{
+    AirPlanName: "BEFORE",
+  }
+}
+```
+- 항공기 객제 정의 
+
+```go 
+package plane
+
+import (
+	"fmt"
+	"right_airplan/domain"
+	"strconv"
+	"time"
+)
+
+type Plane struct {
+	Name      string
+	Landed    bool
+	IsLanding bool
+	Strip     *domain.Strip
+}
+
+func (p *Plane) GetName() string {
+	return p.Name
+}
+
+func (p *Plane) LandingEnable() bool {
+	return p.IsLanding
+}
+
+func (p *Plane) SetLandingEnable(isLanding bool) {
+	p.IsLanding = isLanding
+}
+
+func (p *Plane) Landing() {
+	p.IsLanding = true
+	fmt.Println(p.Name + "이 착륙 중 입니다. ")
+	var appendString string
+	for i := 10; i > 0; i-- {
+		time.Sleep(time.Second * 1)
+		appendString += strconv.Itoa(i) + " 미터 상공 > "
+	}
+	fmt.Println(p.Name + " : " + appendString + "착륙 완료")
+}
+
+func (p *Plane) Stop() {
+	(*p.Strip).Complete()
+	p.IsLanding = false
+	p.Landed = true
+	fmt.Println(p.Name + "가 착륙했습니다.")
+}
+
+func (p *Plane) PlaneLanded() bool {
+	return p.Landed
+}
+
+func NewPlane(planeName string, strip *domain.Strip) *Plane {
+	return &Plane{Name: planeName, Strip: strip, Landed: false, IsLanding: false}
+}
+
+```
+
+- Mediator 역할을 하는 TestDo 핸들링 (Singleton 과 함께 활용)
+
+```go 
+package airport
+
+import (
+  "fmt"
+  "right_airplan/app/plane"
+  "right_airplan/app/strip"
+  "right_airplan/domain"
+  "sync"
+  "testing"
+  "time"
+)
+
+var lock = &sync.Mutex{}
+
+func TestDo(t *testing.T) {
+  airStrip := strip.NewStrip()
+
+  airplanes := []*plane.Plane{
+    plane.NewPlane("대한항공", &airStrip),
+    plane.NewPlane("아시아나 항공", &airStrip),
+    plane.NewPlane("제주 항공", &airStrip),
+    plane.NewPlane("티웨이 항공", &airStrip),
+    plane.NewPlane("동방항공", &airStrip),
+  }
+
+  lock := &sync.Mutex{}
+
+  var wg sync.WaitGroup
+
+  for {
+    for i := 0; i < len(airplanes); i++ {
+      if !airplanes[i].PlaneLanded() {
+        wg.Add(1)
+
+        go func(item domain.AirPlane) {
+          if airStrip.GetRoadStatus() == "BEFORE" || airStrip.GetRoadStatus() == "COMPLETE" {
+            if !item.PlaneLanded() {
+              if airStrip.GetRoadStatus() != "RUNNING" {
+                lock.Lock()
+                defer lock.Unlock()
+                if airStrip.GetRoadStatus() != "RUNNING" {
+                  airStrip.LandingProcedure()
+
+                  item.Landing()
+
+                  item.Stop()
+                }
+              }
+            }
+          }
+
+          wg.Done()
+        }(airplanes[i])
+      }
+    }
+
+    var waitingAirplane string
+    for _, airplane := range airplanes {
+      if !airplane.LandingEnable() && !airplane.PlaneLanded() {
+        waitingAirplane += "[" + airplane.GetName() + "]"
+      }
+    }
+    fmt.Println(waitingAirplane + " 착륙 대기중")
+
+    var isFinished bool
+    for _, airplane := range airplanes {
+      if !airplane.PlaneLanded() {
+        isFinished = false
+        break
+      }
+
+      isFinished = true
+    }
+
+    if isFinished {
+      break
+    }
+    time.Sleep(time.Second * 1)
+  }
+
+  wg.Wait()
+}
+```
+
+### 실행 결과
+
+```shell 
+=== RUN   TestDo
+[대한항공][아시아나 항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+아시아나 항공이 착륙 중 입니다. 
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+아시아나 항공 : 10 미터 상공 > 9 미터 상공 > 8 미터 상공 > 7 미터 상공 > 6 미터 상공 > 5 미터 상공 > 4 미터 상공 > 3 미터 상공 > 2 미터 상공 > 1 미터 상공 > 착륙 완료
+아시아나 항공가 착륙했습니다.
+동방항공이 착륙 중 입니다. 
+[대한항공][제주 항공][티웨이 항공][동방항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+동방항공 : 10 미터 상공 > 9 미터 상공 > 8 미터 상공 > 7 미터 상공 > 6 미터 상공 > 5 미터 상공 > 4 미터 상공 > 3 미터 상공 > 2 미터 상공 > 1 미터 상공 > 착륙 완료
+동방항공가 착륙했습니다.
+[대한항공][제주 항공][티웨이 항공] 착륙 대기중
+티웨이 항공이 착륙 중 입니다. 
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+[대한항공][제주 항공] 착륙 대기중
+티웨이 항공 : 10 미터 상공 > 9 미터 상공 > 8 미터 상공 > 7 미터 상공 > 6 미터 상공 > 5 미터 상공 > 4 미터 상공 > 3 미터 상공 > 2 미터 상공 > 1 미터 상공 > 착륙 완료
+티웨이 항공가 착륙했습니다.
+[대한항공][제주 항공] 착륙 대기중
+대한항공이 착륙 중 입니다. 
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+대한항공 : 10 미터 상공 > 9 미터 상공 > 8 미터 상공 > 7 미터 상공 > 6 미터 상공 > 5 미터 상공 > 4 미터 상공 > 3 미터 상공 > 2 미터 상공 > 1 미터 상공 > 착륙 완료
+대한항공가 착륙했습니다.
+[제주 항공] 착륙 대기중
+[제주 항공] 착륙 대기중
+제주 항공이 착륙 중 입니다. 
+ 착륙 대기중
+ 착륙 대기중
+ 착륙 대기중
+ 착륙 대기중
+ 착륙 대기중
+ 착륙 대기중
+ 착륙 대기중
+ 착륙 대기중
+ 착륙 대기중
+ 착륙 대기중
+제주 항공 : 10 미터 상공 > 9 미터 상공 > 8 미터 상공 > 7 미터 상공 > 6 미터 상공 > 5 미터 상공 > 4 미터 상공 > 3 미터 상공 > 2 미터 상공 > 1 미터 상공 > 착륙 완료
+제주 항공가 착륙했습니다.
+ 착륙 대기중
+--- PASS: TestDo (54.06s)
+```
