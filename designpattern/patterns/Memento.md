@@ -43,3 +43,157 @@ Commit; 8 까지의 모든 프로세스가 확정 됨
 RollBack; 8 까지의 모든 프로세스가 취소됨 
 RollBack to SavePoint 1; 4 ~ 8까지의 모든 프로세스 취소 
 ```
+
+## 실사용 예제를 살펴보면, 
+
+```go 
+package main
+
+import (
+	"gamesave/app/play"
+	"gamesave/app/save"
+	"gamesave/domain"
+)
+
+const Latest int = 0
+
+func main() {
+	gamePlay := play.NewGamePlay(save.NewSave())
+
+	gamePlay.Play(domain.GameSave{
+		Position: domain.CharacterPosition{
+			X: 10,
+			Y: 20,
+		},
+		Status: domain.CharaterStatus{
+			Status: "good",
+		},
+		Address: domain.StoryPoint{
+			Address: "story-1-1",
+		},
+	})
+
+	gamePlay.Play(domain.GameSave{
+		Position: domain.CharacterPosition{
+			X: 10,
+			Y: 22,
+		},
+		Status: domain.CharaterStatus{
+			Status: "good",
+		},
+		Address: domain.StoryPoint{
+			Address: "story-1-1",
+		},
+	})
+
+	gamePlay.Play(domain.GameSave{
+		Position: domain.CharacterPosition{
+			X: 10,
+			Y: 25,
+		},
+		Status: domain.CharaterStatus{
+			Status: "bad",
+		},
+		Address: domain.StoryPoint{
+			Address: "story-1-2",
+		},
+	})
+
+	gamePlay.Save()
+
+	gamePlay.Play(domain.GameSave{
+		Position: domain.CharacterPosition{
+			X: 10,
+			Y: 35,
+		},
+		Status: domain.CharaterStatus{
+			Status: "good",
+		},
+		Address: domain.StoryPoint{
+			Address: "story-1-8",
+		},
+	})
+
+	gamePlay.Save()
+
+	gamePlay.Play(domain.GameSave{
+		Position: domain.CharacterPosition{
+			X: 10,
+			Y: 35,
+		},
+		Status: domain.CharaterStatus{
+			Status: "dead",
+		},
+		Address: domain.StoryPoint{
+			Address: "story-1-20",
+		},
+	})
+
+	gamePlay.Play(gamePlay.Load(Latest))
+}
+```
+
+- Game Play 중 게임 저장 
+
+```go 
+package play
+
+import (
+	"gamesave/domain"
+)
+
+type GamePlay struct {
+	GameData   domain.GameSave
+	SaveModule domain.Save
+}
+
+func (g *GamePlay) Save() {
+	g.SaveModule.Save(g.GameData)
+}
+
+func (g *GamePlay) Load(savePoint int) domain.GameSave {
+	return g.SaveModule.Load(savePoint)
+}
+
+func (g *GamePlay) Play(data domain.GameSave) {
+	g.GameData = data
+}
+
+func NewGamePlay(save domain.Save) domain.Game {
+	return &GamePlay{
+		SaveModule: save,
+	}
+}
+```
+
+- 저장을 위한 용도 
+
+```go 
+package save
+
+import (
+	"gamesave/domain"
+)
+
+type Save struct {
+	SaveData []domain.GameSave
+}
+
+func (s *Save) Save(data domain.GameSave) {
+	s.SaveData = append(s.SaveData, data)
+}
+
+func (s *Save) Load(savePoint int) domain.GameSave {
+	if s.SaveData[savePoint] != (domain.GameSave{}) {
+		return s.SaveData[savePoint]
+	} else {
+		return domain.GameSave{}
+	}
+}
+
+func NewSave() domain.Save {
+	return &Save{
+		SaveData: []domain.GameSave{},
+	}
+}
+```
