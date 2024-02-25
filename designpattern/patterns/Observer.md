@@ -48,3 +48,300 @@ Gof에서 이야기하는 것은 다수의 객체들이 하나의 데이터를 �
 ## 코드예시 
 
 ### Golang 
+
+- 감시자 ( 상태 변경을 객체에 갱신한다. )
+
+```go
+package domain
+
+type MarketData struct {
+	Name    string
+	Pricing int
+}
+
+type Client interface {
+	Update(marketData MarketData)
+}
+```
+
+- 주체 ( 상태 변경을 감시자에 통지 한다. )
+
+```go 
+package domain
+
+type Stock interface {
+	Register(client Client)
+	RunStockMarket()
+}
+```
+
+- 주체와 감시자 사이의 관계 
+
+```go 
+package main
+
+import (
+	"stock/app/client"
+	"stock/app/stock"
+	"stock/domain"
+)
+
+func main() {
+	clients := []domain.Client{
+		client.NewStockClient("Client1"),
+		client.NewStockClient("Client2"),
+		client.NewStockClient("Client3"),
+		client.NewStockClient("Client4"),
+		client.NewStockClient("Client5"),
+	}
+
+	server := stock.NewStockServer()
+
+	for _, item := range clients {
+		server.Register(item)
+	}
+
+	server.RunStockMarket()
+}
+```
+
+- 감시자의 내부 구현
+
+```go 
+package client
+
+import (
+	"fmt"
+	"stock/domain"
+	"strconv"
+)
+
+type StockClient struct {
+	name string
+}
+
+func (s StockClient) Update(data domain.MarketData) {
+	fmt.Print(s.name + " 주식 정보 갱신")
+	fmt.Print("주식명 : " + data.Name)
+	fmt.Print("주식 가격 : " + strconv.Itoa(data.Pricing) + "원")
+	fmt.Println(" ")
+}
+
+func NewStockClient(name string) domain.Client {
+	return &StockClient{
+		name: name,
+	}
+}
+```
+
+- 주체의 내부 구현 
+
+```go 
+package stock
+
+import (
+	"fmt"
+	"math/rand"
+	"stock/domain"
+	"sync"
+	"time"
+)
+
+type StockServer struct {
+	stockClients []domain.Client
+	data         domain.MarketData
+}
+
+func (s *StockServer) Register(client domain.Client) {
+	s.stockClients = append(s.stockClients, client)
+}
+
+func (s *StockServer) notifyPricing() {
+	clientCount := len(s.stockClients)
+
+	if clientCount > 0 {
+		for i := 0; i < clientCount; i++ {
+			client := s.stockClients[i]
+
+			client.Update(s.data)
+		}
+	}
+}
+
+func (s *StockServer) runChangePricing() {
+	go func() {
+		for {
+			time.Sleep(time.Second * 4)
+
+			s.data = domain.MarketData{
+				Name:    "Corp",
+				Pricing: rand.Int(),
+			}
+		}
+	}()
+
+}
+
+func (s *StockServer) RunStockMarket() {
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	s.runChangePricing()
+
+	wg.Add(1)
+	go func() {
+		for {
+			time.Sleep(time.Second * 5)
+
+			fmt.Println("[주식 정보 갱신]")
+
+			s.notifyPricing()
+		}
+	}()
+
+	wg.Wait()
+}
+
+func NewStockServer() domain.Stock {
+	return &StockServer{}
+}
+```
+
+### Java 
+
+```java 
+package designpattern.gof_observer.sample01;
+
+import designpattern.gof_observer.sample01.publisher.NewsMachine;
+import designpattern.gof_observer.sample01.subscriber.AnnualSubscriber;
+import designpattern.gof_observer.sample01.subscriber.EventSubscriber;
+
+public class MainClass {
+    public static void main(String[] args) {
+        NewsMachine newsMachine = new NewsMachine();
+        AnnualSubscriber annualSubscriber = new AnnualSubscriber(newsMachine);
+        EventSubscriber eventSubscriber = new EventSubscriber(newsMachine);
+        newsMachine.setNewsInfo("오늘 한파", "전국 영하 18도 입니다.");
+        newsMachine.setNewsInfo("벛꽃 축제합니다", "다같이 벚꽃보러~");
+    }
+}
+```
+
+```java 
+package designpattern.gof_observer.sample01.publisher;
+
+import designpattern.gof_observer.sample01.subscriber.Observer;
+
+import java.util.ArrayList;
+
+public class NewsMachine implements Publisher {
+
+    private ArrayList<Observer> observers;
+    private String title;
+    private String news;
+
+    public NewsMachine() {
+        observers = new ArrayList<>();
+    }
+
+    @Override
+    public void add(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void delete(Observer observer) {
+        int index = observers.indexOf(observer);
+        observers.remove(index);
+    }
+
+    @Override
+    public void notifyObserver() {
+        for (Observer observer : observers) {
+            observer.update(title, news);
+        }
+    }
+
+    public void setNewsInfo(String title, String news) {
+        this.title = title;
+        this.news = news;
+        notifyObserver();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getNews() {
+        return news;
+    }
+}
+
+package designpattern.gof_observer.sample01.publisher;
+
+import designpattern.gof_observer.sample01.subscriber.Observer;
+
+public interface Publisher {
+    public void add(Observer observer);
+
+    public void delete(Observer observer);
+
+    public void notifyObserver();
+}
+
+package designpattern.gof_observer.sample01.subscriber;
+
+import designpattern.gof_observer.sample01.publisher.Publisher;
+
+public class AnnualSubscriber implements Observer {
+    private String newsString;
+    private Publisher publisher;
+
+    public AnnualSubscriber(Publisher publisher) {
+        this.publisher = publisher;
+        publisher.add(this);
+    }
+
+    @Override
+    public void update(String title, String news) {
+        this.newsString = title + " \n -------- \n " + news;
+        display();
+    }
+
+    private void display() {
+        System.out.println("\n\n오늘의 뉴스\n============================\n\n" + newsString);
+    }
+}
+
+package designpattern.gof_observer.sample01.subscriber;
+
+import designpattern.gof_observer.sample01.publisher.Publisher;
+
+public class EventSubscriber implements Observer {
+    private String newsString;
+    private Publisher publisher;
+
+    public EventSubscriber(Publisher publisher) {
+        this.publisher = publisher;
+        publisher.add(this);
+    }
+
+    @Override
+    public void update(String title, String news) {
+        newsString = title + "\n------------------------------------\n" + news;
+        display();
+    }
+
+    public void display() {
+        System.out.println("\n\n=== 이벤트 유저 ===");
+        System.out.println("\n\n" + newsString);
+    }
+
+}
+
+package designpattern.gof_observer.sample01.subscriber;
+
+public interface Observer {
+    public void update(String title, String news);
+}
+```
