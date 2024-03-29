@@ -1166,7 +1166,64 @@ Here's a [url](www.airbnb.com)
 
 #### Packaging DAGs
 
-### DAG Rungs
+python에서 제공하는 package 기능을 이용하여 복잡한 DAGs를 구성하기 위해서는 아래와 같이 패키지 단위에서 분리하여 사용할 수 있다. 
+
+```shell 
+my_dag1.py
+my_dag2.py
+package1/__init__.py
+package1/functions.py
+```
+
+### .airflowignore
+
+특정 폴더 및 File에 대해서 예외처리가 가능하다. 
+
+```shell 
+project_a
+tenant_[\d]
+# or 
+**/*project_a*
+tenant_[0-9]*
+```
+
+설정되어 있는 Dag 폴더 내의 해당 파일들이 무시될 것이다. 
+- project_a_dag_1.py, TESTING_project_a.py, tenant_1.py, project_a/dag_1.py, and tenant_1/dag_1.py  
+
+### DAG Runs
+
+#### Run Status 
+
+- success : success 또는 skipped 전체에 대해서 
+- failed : failed 또는 upstream_failed 전체에 대해서 
+
+#### Data Interval 
+
+DAG(Directed Acyclic Graph) 실행은 일반적으로 관련된 데이터 기간이 종료된 후에 예약됩니다. 이렇게 함으로써 실행이 시간 범위 내의 모든 데이터를 수집할 수 있습니다. 다시 말해, 2020-01-01 데이터 기간을 다루는 실행은 일반적으로 2020-01-01이 끝난 후, 즉 2020-01-02 00:00:00 이후에 시작되지 않습니다.
+
+#### Dags CatchUp 
+
+Apache Airflow에서 catchup 옵션은 DAG(Directed Acyclic Graph)가 실행되지 않는 기간 동안 발생한 task instance를 backfill 또는 누락되거나 건너뛴 task instance를 catchup 할지 여부를 결정합니다.
+
+
+- catchup = False
+
+현재 날짜 이후부터 task를 스케쥴링
+
+- catchup = True
+
+scheduler가 마지막 data interval 이후로 실행되지 않거나 지워진 모든 interval를 탐색하여 재실행합니다.
+
+##### Best Practice of CatchUp 
+
+catchup 옵션을 true로 설정하기 전에 주의해야하는 포인트 몇가지를 간략하게 정리합니다.
+
+- start_date와 schedule_interval을 올바르게 설정했는지 확인해야 합니다.
+date range가 크거나 data interval이 작은 경우에는 catchup 프로세스에 시간이 오래 걸리고 Airflow 시스템 속도가 느려질 수 있습니다.
+- Task dependencies를 확인해야 합니다.
+다른 task에 dependancy가 있는지 airflow는 체크해주지 않으므로, 현재의 dag와 dependancy가 있는 task를 확인해야 합니다.
+- idempotent(멱등성)을 보장하는 task인지 확인해야 합니다.
+언제 실행하더라도 같은 결과를 가져오는 task가 아니라면, catchup tasks에서 side effects를 발생할 수 있습니다.
 
 ### Operators
 
