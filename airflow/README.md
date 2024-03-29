@@ -286,8 +286,8 @@ ssh-keygen -t rsa -b 4096 -C "****@****.**"
 # 다른 방법
 # https://kimjinung.tistory.com/5
 kubectl create secret generic airflow-git-ssh-secret \
-  --from-file=gitSshKey=/Users/lines/sources/03_onlines_corp/settings/airflow_settings/id_rsa \
-  --from-file=id_ed25519.pub=/Users/lines/sources/03_onlines_corp/settings/airflow_settings/id_rsa.pub \
+  --from-file=gitSshKey=~/settings/airflow_settings/id_rsa \
+  --from-file=id_ed25519.pub=~/settings/airflow_settings/id_rsa.pub \
   -n airflow
 
 helm show values apache-airflow/airflow > values.yaml
@@ -389,8 +389,8 @@ ssh-keygen -t rsa -b 4096 -C "keepinmindsh@gmail.com"
 # 등록후 kubectl secret 파일을 생성 필요 
 # secret을 통해 생성된 경로에 file 로드하기 
 kubectl create secret generic airflow-git-ssh-secret \
-  --from-file=gitSshKey=/Users/lines/sources/03_onlines_corp/settings/airflow_settings/id_rsa \
-  --from-file=id_ed25519.pub=/Users/lines/sources/03_onlines_corp/settings/airflow_settings/id_rsa.pub \
+  --from-file=gitSshKey=~/settings/airflow_settings/id_rsa \
+  --from-file=id_ed25519.pub=~/settings/airflow_settings/id_rsa.pub \
   -n airflow
 
 
