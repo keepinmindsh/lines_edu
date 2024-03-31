@@ -40,3 +40,7 @@
 - 블랙보드 패턴
 - 인터프리터 패턴
 - 헥사고날 아키텍처 패턴
+
+> [Software Development Process](https://www.geeksforgeeks.org/software-development-process/?ref=lbp)    
+> [Software Development Paradigms and Processes](https://icarus.cs.weber.edu/~dab/cs1410/textbook/1.Basics/models.html)   
+> [5 Popular Software Development](https://medium.com/globalluxsoft/5-popular-software-development-models-with-their-pros-and-cons-12a486b569dc)
