@@ -1,4 +1,4 @@
-# Index 
+# Index
 
 - [AirFlow](#airflow)
   - [AirFlow 소개](#airflow-is)
@@ -18,10 +18,11 @@
     - [Airflow RateLimiting 설정](#setting-of-airflow-ratelimiting)
     - [민감한 정보에 대한 Masking 처리](#handling-masking-on-sensitive-information)
   - [Airflow 기본](#airflow-basic)
+- [Best Practices](#bestpractices)
 
 ---
 
-# AirFlow 
+# AirFlow
 
 - [https://airflow.apache.org/](https://airflow.apache.org/)
 
@@ -31,72 +32,72 @@ Airbnb에서 개발했으며 데이터 파이프라인을 관리하고 오케스
 
 ![Airflow Images](https://github.com/lines-code/lines-workflow-airflow-python/blob/master/docs/assets/AirflowConcepts.png)
 
-### Scheduler 
+### Scheduler
 - 예약된 워크플로우를 트리거하고, Executor에게 작업을 전달하고 실행
 
-### Executor 
-- 실행 중인 작업을 처리하는 실행 프로그램 
-- 기본적으로 Airflow 를 설치하면 스케줄러 내부의 모든 것을 실행하지만, 
+### Executor
+- 실행 중인 작업을 처리하는 실행 프로그램
+- 기본적으로 Airflow 를 설치하면 스케줄러 내부의 모든 것을 실행하지만,
 - Production 을 위한 Airfow 작업에서는 Worker에게 작업을 전달합니다.
 
 Executor 란 작업자들에게 작업을 실행 시키는 역할을 한다. 종류로는 SequentialExecutor, CeleryExecutor, KubernetesExecutor 등이 있다.
 
-#### Executors 
+#### Executors
 
 - Sequential Executors
-  - default executor 이다. 
-  - 클러스터를 구성하지 않고 작업은 순차적으로 진행된다. 
-  - scheduler와 같이 진행된다. 
-  - DB는 보통 Sqlite를 사용한다. 
-  - 쉽고 간결하다 
-  - 스케일 인아웃 불가능 
-  - 순차실행이라 병렬처리 불가능 
-  - 테스트 디버깅용으로 좋다. 
-- Local Executor 
-  - scheduler와 함께 동작한다. 
-  - 병렬 처리 가능 
-  - 쉽게 세팅 가능 
-  - 가볍고 싸다 
-  - 병렬처리 가능하다. 
-  - 스케일 인아웃을 할 수 없다. 
-  - 테스트 디버깅 용으로 좋다. 작은 스케일에서 사용하기 좋다. 
-- Celery Executor 
-  - rabbitMQ를 사용하여야 한다. 
-  - 분산 태스크 처리가 가능하다. 
-  - 수평 구조로 스케일링 할 수 있다. 
-  - 내 결함성을 제공한다. 
-  - 자원 낭비가 있을 수 있다. 
-  - 비용 효율적이지 않다. 
+  - default executor 이다.
+  - 클러스터를 구성하지 않고 작업은 순차적으로 진행된다.
+  - scheduler와 같이 진행된다.
+  - DB는 보통 Sqlite를 사용한다.
+  - 쉽고 간결하다
+  - 스케일 인아웃 불가능
+  - 순차실행이라 병렬처리 불가능
+  - 테스트 디버깅용으로 좋다.
+- Local Executor
+  - scheduler와 함께 동작한다.
+  - 병렬 처리 가능
+  - 쉽게 세팅 가능
+  - 가볍고 싸다
+  - 병렬처리 가능하다.
+  - 스케일 인아웃을 할 수 없다.
+  - 테스트 디버깅 용으로 좋다. 작은 스케일에서 사용하기 좋다.
+- Celery Executor
+  - rabbitMQ를 사용하여야 한다.
+  - 분산 태스크 처리가 가능하다.
+  - 수평 구조로 스케일링 할 수 있다.
+  - 내 결함성을 제공한다.
+  - 자원 낭비가 있을 수 있다.
+  - 비용 효율적이지 않다.
   - production에 적합하다.
-  - worker가 항상 동작하고 있어야 한다. 
-- Kubernetes Executor 
-  - Kubernetes API를 사용하여 매니저 된다. 
-  - 스케일러블 하기 쉽다. 
-  - 내 결함성을 가진다. 
-  - 자원을 개별적으로 태스크 돌릴 수 있다. 
-  - production에 적합하다. 
-  - 워커를 필요할 때 사용이 가능하다. 
+  - worker가 항상 동작하고 있어야 한다.
+- Kubernetes Executor
+  - Kubernetes API를 사용하여 매니저 된다.
+  - 스케일러블 하기 쉽다.
+  - 내 결함성을 가진다.
+  - 자원을 개별적으로 태스크 돌릴 수 있다.
+  - production에 적합하다.
+  - 워커를 필요할 때 사용이 가능하다.
 
-#### 사용 가이드 라인 
+#### 사용 가이드 라인
 
 Celery Executor는 상용버전에는 적합하나 Rabbimq나 Redis의 큐나 세션을 이용하여 Executor의 이중 작업을 꼭 방지 해야한다. 작업이 두번 실행 되면 안되기때문이다. 그리고 Celery에 경우 클러스터를 구축하여야 하기 때문에 Zookeeper나, etcd, consul을 사용하여 자기 자신이 replication을 하는 클러스터를 구축을 해야하는데, web ui, scheduler, rabbimq, 클러스터 broker3대, DB서버 등을 계산한다면 컴퓨터가 최소 4~5대 정도는 필요하다. orchestration툴에 5대의 컴퓨터는 조금 오버 스펙이라고 생각하여 잘 사용하지는 않는 것 같다. 제대로 관리 하고 싶다면 사용해보자.
 
 Kubernetes의 경우에는 Container를 만들고 작업을 실행한다음 바로 삭제 하기 때문에 Log를 제한적으로 볼수 밖에 없다. 그래서 K8s에 대해 다 아는 분이 꼭 사용하여야 한다. Celery보다 자유로운 구성을 할 수 있어 Celery보다 resource를 효율적으로 사용할 수 있다. 하지만 러닝커브가 큰 k8s를 잘 다뤄야 한다는 문제점이 있고, Task를 수행한 Executor를 바로 삭제하기 때문에 Log가 많은 정보를 담고 있지 않다.
 
-##### 참조 
+##### 참조
 
 > [https://magpienote.tistory.com/225](https://magpienote.tistory.com/225)
 
-### DAG Directory 
+### DAG Directory
 - /dags 정의한 DAG 파일을 포함하는 폴더
 - Scheduler와 Executor, 그리고 Executor가 가진 모든 Worker 가 읽는 폴더입니다.
-- Dag 내의 Task 실행 단위에서 핸들링 할 수 있는 Operator 입니다. 
+- Dag 내의 Task 실행 단위에서 핸들링 할 수 있는 Operator 입니다.
   - https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html
 
-### Metadata Database 
+### Metadata Database
 - scheduler, executor 및 webserver가 상태를 저장하는 데 사용하는 데이터베이스
 
-### Webserver 
+### Webserver
 - 사용자의 편의성을 위해 DAG와 Task의 동작을 검사하고 트리거하고, 디버깅할 수 있는 UI를 제공하는 웹 서버
 
 ```python 
@@ -211,14 +212,14 @@ with DAG(
 
 ## Airflow's Good Things
 
-- Kubernetes Executor를 통해서 Pod 단위의 배포 및 처리가 가능함. 
-  - Kubernetes Executor를 사용하면 Worker를 Pod 형태로 동적으로 생성하게 됩니다. 
-  - DAG이 실행될 때 Task 하나당 하나의 Worker Pod가 배포 및 실행된 후 삭제됩니다. 
+- Kubernetes Executor를 통해서 Pod 단위의 배포 및 처리가 가능함.
+  - Kubernetes Executor를 사용하면 Worker를 Pod 형태로 동적으로 생성하게 됩니다.
+  - DAG이 실행될 때 Task 하나당 하나의 Worker Pod가 배포 및 실행된 후 삭제됩니다.
   - 실행할 DAG이 없는 경우 Kubernetes 위에 Worker Pod이 존재하지 않습니다.
 
 - GigSync는 주기적으로 Airflow DAG 폴더가 주기적으로 업데이트 됩니다.
-  - Workflow 코드에 대한 이력 관리가 가능하다. 
-  - Dag Generator를 API를 통해서 전달받을 수 있는 방식으로 구성한 뒤 해당 소스를 git repository로 Sync 처리하면 코드 작성후 사용할 수 있는 방식으로 처리 가능함. 
+  - Workflow 코드에 대한 이력 관리가 가능하다.
+  - Dag Generator를 API를 통해서 전달받을 수 있는 방식으로 구성한 뒤 해당 소스를 git repository로 Sync 처리하면 코드 작성후 사용할 수 있는 방식으로 처리 가능함.
   - 각 필요에 따라 자체적인 템플릿 구성 및 생성이 가능함.
 
 ```yaml 
@@ -238,13 +239,13 @@ gitSync:
     uid: 65533
 ```
 
-- Web에서 원격으로 제어 가능한 API 제공 
-  - 각 Dag를 개발자/운영자 입맛에 맞게 제어 및 관리가 가능해요.  
+- Web에서 원격으로 제어 가능한 API 제공
+  - 각 Dag를 개발자/운영자 입맛에 맞게 제어 및 관리가 가능해요.
   - https://airflow.apache.org/docs/apache-airflow/stable/stable-rest-api-ref.html#tag/DAG
 
 - Airbnb에서 개발했으며 데이터 파이프라인을 관리하고 오케스트레이션 하기위한 강력한 오픈 소스 플랫폼으로, 동작 파이프라인 생성, 작업 재시도 및 모니터링과 같은 주요 기능을 제공함.
 
-# Install Airflow on Kubernetes 
+# Install Airflow on Kubernetes
 
 ```shell 
 gcloud config set project ${project-id}
@@ -286,8 +287,8 @@ ssh-keygen -t rsa -b 4096 -C "****@****.**"
 # 다른 방법
 # https://kimjinung.tistory.com/5
 kubectl create secret generic airflow-git-ssh-secret \
-  --from-file=gitSshKey=~/settings/airflow_settings/id_rsa \
-  --from-file=id_ed25519.pub=~/settings/airflow_settings/id_rsa.pub \
+  --from-file=gitSshKey=/Users/lines/sources/03_onlines_corp/settings/airflow_settings/id_rsa \
+  --from-file=id_ed25519.pub=/Users/lines/sources/03_onlines_corp/settings/airflow_settings/id_rsa.pub \
   -n airflow
 
 helm show values apache-airflow/airflow > values.yaml
@@ -304,7 +305,7 @@ kubectl expose deployment airflow-webserver --type=LoadBalancer --name=airflow-s
 
 ## values.yaml of kubernetes applied
 
-- airflow config 중의 일부 
+- airflow config 중의 일부
 
 ```shell 
   gitSync:
@@ -357,9 +358,9 @@ kubectl expose deployment airflow-webserver --type=LoadBalancer --name=airflow-s
     sshKeySecret: airflow-git-ssh-secret
 ```
 
-# Install Airflow on Docker Desktop 
+# Install Airflow on Docker Desktop
 
-- 기본적인 Docker Desktop에 내장되어 있는 Kubernetes 설치 
+- 기본적인 Docker Desktop에 내장되어 있는 Kubernetes 설치
 
 설치된 kubernetes의 nodes 점검
 
@@ -389,8 +390,8 @@ ssh-keygen -t rsa -b 4096 -C "keepinmindsh@gmail.com"
 # 등록후 kubectl secret 파일을 생성 필요 
 # secret을 통해 생성된 경로에 file 로드하기 
 kubectl create secret generic airflow-git-ssh-secret \
-  --from-file=gitSshKey=~/settings/airflow_settings/id_rsa \
-  --from-file=id_ed25519.pub=~/settings/airflow_settings/id_rsa.pub \
+  --from-file=gitSshKey=/Users/lines/sources/03_onlines_corp/settings/airflow_settings/id_rsa \
+  --from-file=id_ed25519.pub=/Users/lines/sources/03_onlines_corp/settings/airflow_settings/id_rsa.pub \
   -n airflow
 
 
@@ -461,19 +462,19 @@ kubectl get services
 
 # AirFlow Study
 
-##  Get Started 
+##  Get Started
 
 - [Get Started](https://airflow.apache.org/docs/apache-airflow/stable/start.html)
 
-기본적인 사용 용례에 대한 정리   
+기본적인 사용 용례에 대한 정리
 
-airflow는 python 기반으로 되어 있으며, all-in-one standalone 버전으로 아래의 명령어로 사용이 가능하다. 
+airflow는 python 기반으로 되어 있으며, all-in-one standalone 버전으로 아래의 명령어로 사용이 가능하다.
 
 ```shell 
 airflow standalone 
 ```
 
-all in one 버전으로 사용하지 않고 개별적으로 사용하고 싶을 경우 아래와 같이 명령어를 분리해서 사용이 가능하다. 
+all in one 버전으로 사용하지 않고 개별적으로 사용하고 싶을 경우 아래와 같이 명령어를 분리해서 사용이 가능하다.
 
 ```shell 
 airflow db migrate
@@ -490,7 +491,7 @@ airflow webserver --port 8080
 airflow scheduler
 ```
 
-서비스 기동후 Dags 중에 테스트 Dags를 정의해서 아래와 같이 명령어로 실행할 수 있다. 
+서비스 기동후 Dags 중에 테스트 Dags를 정의해서 아래와 같이 명령어로 실행할 수 있다.
 
 ```shell 
 # run your first task instance
@@ -501,7 +502,7 @@ airflow dags backfill example_bash_operator \
     --end-date 2015-01-02
 ```
 
-위의 명령어 실행시 동작하는 데이터는 본인이 사용하는 bash 또는 zsh의 환경변수 경로로 지정한 폴더 내에 로그 및 데이터가 생성된다. 
+위의 명령어 실행시 동작하는 데이터는 본인이 사용하는 bash 또는 zsh의 환경변수 경로로 지정한 폴더 내에 로그 및 데이터가 생성된다.
 
 ```shell 
 # ~/.zshrc 파일 내 추가된 경로 / 해당 폴더경로는 생성되어 있어야함! 
@@ -515,13 +516,13 @@ export AIRFLOW_HOME=~/airflow
 
 - [Airflow CLI](https://airflow.apache.org/docs/apache-airflow/stable/howto/usage-cli.html)
 
-Airflow 자동완성 적용하기 Profile에 추가해서 사용하기 
+Airflow 자동완성 적용하기 Profile에 추가해서 사용하기
 
 ```shell 
 register-python-argcomplete airflow >> ~/.bashrc
 ```
 
-Airflow의 Dags를 추출하는 방법에 대해서 알아보면, 
+Airflow의 Dags를 추출하는 방법에 대해서 알아보면,
 
 ```shell 
 airflow dags show example_complex
@@ -533,16 +534,16 @@ airflow dags show example_bash_operator --save example_bash_operator.png
 airflow dags show example_bash_operator --imgcat
 ```
 
-**Command Formatting Output**     
+**Command Formatting Output**
 
-[Formatting commands output](https://airflow.apache.org/docs/apache-airflow/stable/howto/usage-cli.html#formatting-commands-output).  
+[Formatting commands output](https://airflow.apache.org/docs/apache-airflow/stable/howto/usage-cli.html#formatting-commands-output).
 
 
-**Purge history from metadata database**     
+**Purge history from metadata database**
 
 - [https://airflow.apache.org/docs/apache-airflow/stable/howto/usage-cli.html#purge-history-from-metadata-database](https://airflow.apache.org/docs/apache-airflow/stable/howto/usage-cli.html#purge-history-from-metadata-database)
 
-### install python airflow 
+### install python airflow
 
 - [airflow install](https://airflow.apache.org/docs/apache-airflow/stable/installation/installing-from-pypi.html)
 
@@ -552,27 +553,27 @@ pip install "apache-airflow==2.8.2" apache-airflow-providers-google==10.1.0
 
 ## AirFlow Documentation Help
 
-### AirFlow Docker Image 
+### AirFlow Docker Image
 
 - [Docker Image for Apache Airflow](https://airflow.apache.org/docs/docker-stack/index.html)
 
-### Airflow on Kubernetes with Heml Chart  
+### Airflow on Kubernetes with Heml Chart
 
 - [kubernetes With Airflow](https://airflow.apache.org/docs/helm-chart/stable/index.html)
 
-### Prerequisites Of Airflow 
+### Prerequisites Of Airflow
 
 - [Airflow - Prerequisites](https://airflow.apache.org/docs/apache-airflow/stable/installation/prerequisites.html#prerequisites)
 
-### LifeCycle and System EOL for Airflow  
+### LifeCycle and System EOL for Airflow
 
 - [Airflow System EOL](https://airflow.apache.org/docs/apache-airflow/stable/installation/prerequisites.html#prerequisites)
 
-### Upgrade and migrate for Airflow 
+### Upgrade and migrate for Airflow
 
 - [Airflow System Migrations](https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading.html)
 
-### Security for Airflow 
+### Security for Airflow
 
 - [Airflow Security 구성](https://airflow.apache.org/docs/apache-airflow/stable/security/index.html)
 
@@ -580,29 +581,30 @@ pip install "apache-airflow==2.8.2" apache-airflow-providers-google==10.1.0
 
 - [Airflow Rate Limiting](https://airflow.apache.org/docs/apache-airflow/stable/security/webserver.html#rate-limiting)
 
-### Handling Masking on Sensitive Information 
+### Handling Masking on Sensitive Information
 
 - [민감한 정보에 대한 Masking 처리](https://airflow.apache.org/docs/apache-airflow/stable/security/webserver.html#rate-limiting)
 
 # AirFlow Basic
 
-## Architecture Overview 
+## Architecture Overview
 
-### Control Flow 
+### Control Flow
 
-#### XCom 
+#### XCom
 
+- [XComs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/xcoms.html)
 - [Airflow XCom](https://dydwnsekd.tistory.com/107)
 
 XCom은 Dag 내의 task 사이에서 데이터를 전달하기 위해서 사용되는데, Celery Executor를 예로 들면, 각 Task들이 각기 다른 Woker에서 실행쇨 수 있으면,  
-XCom은 이러한 경우 task간 데이터 전달을 가능하게 한다. 
+XCom은 이러한 경우 task간 데이터 전달을 가능하게 한다.
 
-- Xcom 사용하기 
-  - Python Operator return 값을 통한 Xcom 사용 
-  - push-pull 을 이용한 Xcom 사용 
-  - Jinja Template 을 이용한 Xcom 사용 
+- Xcom 사용하기
+  - Python Operator return 값을 통한 Xcom 사용
+  - push-pull 을 이용한 Xcom 사용
+  - Jinja Template 을 이용한 Xcom 사용
 
-#### PythonOperator return 값을 이용한 Xcom 사용 
+#### PythonOperator return 값을 이용한 Xcom 사용
 
 ```python
 def return_xcom():
@@ -615,7 +617,7 @@ return_xcom = PythonOperator(
 )
 ```
 
-#### push-pull 을 이용한 Xcom 사용 
+#### push-pull 을 이용한 Xcom 사용
 
 PythonOperator에서 return을 하는 방법 이외에도 아래와 같이 context['task_instance']를 이용하여 xcom에 push, pull 하여 데이터를 주고받는 것 또한 가능한데, 여기서 알아야 할 내용들에 대해 간단하게 설명한다.
 먼저 context['task_instance']와 context['ti']는 동일한 의미로 ti = task_instance로 간단하게 축약하여 사용할 수 있다.
@@ -652,7 +654,7 @@ xcom_pull_task = PythonOperator(
 )
 ```
 
-#### Jinja templates를 이용한 Xcom 사용 
+#### Jinja templates를 이용한 Xcom 사용
 
 ```python
 bash_xcom_taskids = BashOperator(
@@ -759,15 +761,67 @@ bash_xcom_pull = BashOperator(
 return_xcom >> xcom_push_task >>xcom_pull_task >> bash_xcom_taskids >> bash_xcom_key >> bash_xcom_push >> bash_xcom_pull
 ```
 
+#### Cluade AI의 샘플 예제 코드 / XCom 활용에 대한 !
+
+```python
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.sensors.filesystem import FileSensor
+from datetime import datetime
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2023, 4, 24)
+}
+
+def read_file(**context):
+    file_path = context['templates_dict']['file_path']
+    with open(file_path, 'r') as f:
+        file_content = f.read()
+    context['ti'].xcom_push(key='file_content', value=file_content)
+
+def process_file(**context):
+    file_content = context['ti'].xcom_pull(task_ids='file_sensor_task', key='file_content')
+    print(f"파일 내용: {file_content}")
+    # 파일 내용 처리 로직 추가
+
+with DAG('file_sensor_xcom_content_example', schedule_interval=None, default_args=default_args, catchup=False) as dag:
+
+    file_sensor_task = FileSensor(
+        task_id='file_sensor_task',
+        filepath='/path/to/file.txt',
+        poke_interval=10,
+        timeout=60 * 5,
+        dag=dag
+    )
+
+    read_file_task = PythonOperator(
+        task_id='read_file_task',
+        python_callable=read_file,
+        op_kwargs={'file_path': '/path/to/file.txt'},
+        provide_context=True,
+        dag=dag
+    )
+
+    process_file_task = PythonOperator(
+        task_id='process_file_task',
+        python_callable=process_file,
+        provide_context=True,
+        dag=dag
+    )
+
+    file_sensor_task >> read_file_task >> process_file_task
+```
+
 
 ## [Core Concepts > Dags](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html)
 
 ### Dag Definition
 
 
-#### Task Dependencies 
+#### Task Dependencies
 
-- >>, << 를 이용한 흐름 구성 가능 
+- >>, << 를 이용한 흐름 구성 가능
 
 ```python
 with DAG(
@@ -792,7 +846,7 @@ with DAG(
 ```
 
 
-- upstream, downstream 구성을 이용한 workflow 설계 
+- upstream, downstream 구성을 이용한 workflow 설계
 
 
 ```python
@@ -834,12 +888,12 @@ with DAG("my_continuous_dag", schedule="@continuous"):
 #### Dag Assign
 
 - with DAG
-- @dag 
-- Upstream, Downstream 
+- @dag
+- Upstream, Downstream
 
-#### Default Args 
+#### Default Args
 
-하나의 Dag 안에 많은 오퍼레이터가 존재하는 경우, 기본 인자를 설정할 필요가 있다. default_args를 사용할 경우 해당 Dag에 연결되어 있는 Operator는 defualt_args에 정의된 값은 모두 같이 사용한다. 
+하나의 Dag 안에 많은 오퍼레이터가 존재하는 경우, 기본 인자를 설정할 필요가 있다. default_args를 사용할 경우 해당 Dag에 연결되어 있는 Operator는 defualt_args에 정의된 값은 모두 같이 사용한다.
 
 
 ```python
@@ -854,12 +908,12 @@ with DAG(
     op = BashOperator(task_id="hello_world", bash_command="Hello World!")
     print(op.retries)  # 2
 ```
-#### Dag Decorator 
+#### Dag Decorator
 
-Dag를 정의하는 방식은 
+Dag를 정의하는 방식은
 
-- DAG()를 사용하는 방법이 있고, 
-- @dag를 이용하는 방법이 있고, 
+- DAG()를 사용하는 방법이 있고,
+- @dag를 이용하는 방법이 있고,
 
 ```python 
 @dag(
@@ -894,7 +948,7 @@ def example_dag_decorator(email: str = "example@example.com"):
 example_dag = example_dag_decorator()
 ```
 
-#### Control Flow  
+#### Control Flow
 ##### Branching
 
 ```python
@@ -926,7 +980,7 @@ start_op >> branch_op >> [continue_op, stop_op]
 ```
 
 
-##### Latest Only 
+##### Latest Only
 
 ```python 
 import datetime
@@ -955,7 +1009,7 @@ with DAG(
     task2 >> [task3, task4]
 ```
 
-#### Depends On Past 
+#### Depends On Past
 
 
 ##### Trigger Rules
@@ -998,21 +1052,21 @@ branching >> branch_a >> follow_branch_a >> join
 branching >> branch_false >> join
 ```
 
-- With Trigger 
+- With Trigger
 
-Trigger Rule로 정의 하면, 
+Trigger Rule로 정의 하면,
 
-- all_success 
-- all_failed 
-- all_done 
-- all_skipped 
-- one_failed 
-- one_success 
-- one_done 
-- none_failed 
-- none_failed_min_one_success 
-- none_skipped 
-- always 
+- all_success
+- all_failed
+- all_done
+- all_skipped
+- one_failed
+- one_success
+- one_done
+- none_failed
+- none_failed_min_one_success
+- none_skipped
+- always
 
 ```python
 import datetime
@@ -1042,13 +1096,13 @@ with DAG(
 ```
 
 
-#### Setup and teardown 
+#### Setup and teardown
 
 - [Setup And Teardown](https://airflow.apache.org/docs/apache-airflow/stable/howto/setup-and-teardown.html)
 
-#### Dynamics DAGs 
+#### Dynamics DAGs
 
-for loop 문장 등을 이용해서 동적으로 dag 내의 Task를 생성 및 연결할 수 있다. 
+for loop 문장 등을 이용해서 동적으로 dag 내의 Task를 생성 및 연결할 수 있다.
 
 ```python
  with DAG("loop_example", ...):
@@ -1061,11 +1115,11 @@ for loop 문장 등을 이용해서 동적으로 dag 내의 Task를 생성 및 �
          first >> t >> last
 ```
 
-#### DAG Visualization 
+#### DAG Visualization
 
 ##### TaskGroups
 
-Dag Graph 에서 Task를 Group 단위로 묶어서 표현할 수 있다. 
+Dag Graph 에서 Task를 Group 단위로 묶어서 표현할 수 있다.
 
 ```python
  from airflow.decorators import task_group
@@ -1106,9 +1160,9 @@ with DAG(
         print(task2.retries)  # 2
 ```
 
-##### Edge Labels 
+##### Edge Labels
 
-Task 사이의 Labeling을 표현할 수 있다. 
+Task 사이의 Labeling을 표현할 수 있다.
 
 ```python
 
@@ -1131,15 +1185,15 @@ with DAG(
     check >> Label("Errors found") >> describe >> error >> report
 ```
 
-#### DAG & Task Documentation
+##### DAG & Task Documentation
 
 - doc
-- doc_json 
+- doc_json
 - doc_yaml
-- doc_md 
-- doc_rst 
+- doc_md
+- doc_rst
 
-```python 
+```python
 """
 ### My great DAG
 """
@@ -1160,80 +1214,278 @@ Here's a [url](www.airbnb.com)
 """
 ```
 
-#### SubDAGs
+##### SubDAGs
 
-#### TaskGroups vs SubDAGs
+```python
+import pendulum
 
-#### Packaging DAGs
+from airflow.models.dag import DAG
+from airflow.operators.empty import EmptyOperator
 
-python에서 제공하는 package 기능을 이용하여 복잡한 DAGs를 구성하기 위해서는 아래와 같이 패키지 단위에서 분리하여 사용할 수 있다. 
 
-```shell 
+def subdag(parent_dag_name, child_dag_name, args) -> DAG:
+    """
+    Generate a DAG to be used as a subdag.
+
+    :param str parent_dag_name: Id of the parent DAG
+    :param str child_dag_name: Id of the child DAG
+    :param dict args: Default arguments to provide to the subdag
+    :return: DAG to use as a subdag
+    """
+    dag_subdag = DAG(
+        dag_id=f"{parent_dag_name}.{child_dag_name}",
+        default_args=args,
+        start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+        catchup=False,
+        schedule="@daily",
+    )
+
+    for i in range(5):
+        EmptyOperator(
+            task_id=f"{child_dag_name}-task-{i + 1}",
+            default_args=args,
+            dag=dag_subdag,
+        )
+
+    return dag_subdag
+
+DAG_NAME = "example_subdag_operator"
+
+with DAG(
+    dag_id=DAG_NAME,
+    default_args={"retries": 2},
+    start_date=datetime.datetime(2022, 1, 1),
+    schedule="@once",
+    tags=["example"],
+) as dag:
+    start = EmptyOperator(
+        task_id="start",
+    )
+
+    section_1 = SubDagOperator(
+        task_id="section-1",
+        subdag=subdag(DAG_NAME, "section-1", dag.default_args),
+    )
+
+    some_other_task = EmptyOperator(
+        task_id="some-other-task",
+    )
+
+    section_2 = SubDagOperator(
+        task_id="section-2",
+        subdag=subdag(DAG_NAME, "section-2", dag.default_args),
+    )
+
+    end = EmptyOperator(
+        task_id="end",
+    )
+
+    start >> section_1 >> some_other_task >> section_2 >> end
+```
+
+##### TaskGroups vs SubDAGs
+
+| TaskGroup                                                       | SubDAG                                                                     |
+|-----------------------------------------------------------------|:---------------------------------------------------------------------------|
+| Repeating patterns as part of the same DAG                      | Repeating patterns as a separate DAG                                       |
+| One set of views and statistics for the DAG                     | Separate set of views and statistics between parent and child DAGs         |
+| One set of DAG configuration                                    | Several sets of DAG configurations                                         |
+| Honors parallelism configurations through existing SchedulerJob | Does not honor parallelism configurations due to newly spawned BackfillJob |
+| Simple construct declaration with context manager               | Complex DAG factory with naming restrictions                               |
+
+##### Packaging DAGs
+
+복잡한 Dag 구성을 위해서는 Packaging 를 사용 해야 할 필요가 있습니다.
+
+- Dag Folder 구성 참고
+
+```
 my_dag1.py
 my_dag2.py
 package1/__init__.py
 package1/functions.py
 ```
 
-### .airflowignore
+##### .airflowignore
 
-특정 폴더 및 File에 대해서 예외처리가 가능하다. 
+- regexp
 
-```shell 
+``` 
 project_a
 tenant_[\d]
-# or 
+```
+
+- glob syntax
+
+``` 
 **/*project_a*
 tenant_[0-9]*
 ```
 
-설정되어 있는 Dag 폴더 내의 해당 파일들이 무시될 것이다. 
-- project_a_dag_1.py, TESTING_project_a.py, tenant_1.py, project_a/dag_1.py, and tenant_1/dag_1.py  
+##### Dag 중지, 비활성화, 삭제
 
-### DAG Runs
+- [Dag 중지, 비활성화, 삭제](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html#dag-pausing-deactivation-and-deletion)
 
-#### Run Status 
+## Core Concepts > DAG Runs
 
-- success : success 또는 skipped 전체에 대해서 
-- failed : failed 또는 upstream_failed 전체에 대해서 
+- [Dag Runs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html)
 
-#### Data Interval 
+### DAG Run Status
 
-DAG(Directed Acyclic Graph) 실행은 일반적으로 관련된 데이터 기간이 종료된 후에 예약됩니다. 이렇게 함으로써 실행이 시간 범위 내의 모든 데이터를 수집할 수 있습니다. 다시 말해, 2020-01-01 데이터 기간을 다루는 실행은 일반적으로 2020-01-01이 끝난 후, 즉 2020-01-02 00:00:00 이후에 시작되지 않습니다.
+- success
+- skipped
+- failed
+- upstream_failed
 
-#### Dags CatchUp 
+> Dag Run의 상태 관리의 경우, Trigger Rule의 설정에 따라서 예상치 못한 결과를 야기할 수 있다.   
+> 예를 들어 all_done의 경우, 남아있는 Task 등의 상태와 무관하게 완료로 처리되어 버릴 수 있는데,   
+> 심지어 일부 Task가 실패한 경우에도 전체의 상태가 성공으로 체크될 수 있습니다.
 
-Apache Airflow에서 catchup 옵션은 DAG(Directed Acyclic Graph)가 실행되지 않는 기간 동안 발생한 task instance를 backfill 또는 누락되거나 건너뛴 task instance를 catchup 할지 여부를 결정합니다.
+### Data Interval
 
 
-- catchup = False
+DAG 실행은 일반적으로 해당되는 데이터 간격이 끝난 후 예약되어, 실행이 시간 범위 내의 모든 데이터를 수집할 수 있도록 보장합니다.  
+다시 말해, 2020-01-01 데이터 기간을 포함하는 실행은 일반적으로 2020-01-01이 끝날 때까지 시작되지 않으며,   
+즉 2020-01-02 00:00:00 이후에 시작됩니다.
 
-현재 날짜 이후부터 task를 스케쥴링
+> [Dags 는 TimeTables을 참고하면 스케쥴링되는 시간을 체크할 수 있다.](https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/timetable.html)
 
-- catchup = True
+### Catchup
 
-scheduler가 마지막 data interval 이후로 실행되지 않거나 지워진 모든 interval를 탐색하여 재실행합니다.
+start_date, 가능한 end_date 및 데이터 집합이 아닌 일정을 사용하여 정의된 Airflow DAG는 일련의 간격을 정의하며,   
+스케줄러는 이를 개별 DAG 실행으로 변환하고 실행합니다.   
+스케줄러는 기본적으로 지난 데이터 간격 이후 실행되지 않은 데이터 간격에 대해 DAG 실행을 시작합니다 (또는 지워진 경우).    
+이 개념을 Catchup이라고 합니다.
 
-##### Best Practice of CatchUp 
+```python
+"""
+Code that goes along with the Airflow tutorial located at:
+https://github.com/apache/airflow/blob/main/airflow/example_dags/tutorial.py
+"""
+from airflow.models.dag import DAG
+from airflow.operators.bash import BashOperator
 
-catchup 옵션을 true로 설정하기 전에 주의해야하는 포인트 몇가지를 간략하게 정리합니다.
+import datetime
+import pendulum
 
-- start_date와 schedule_interval을 올바르게 설정했는지 확인해야 합니다.
-date range가 크거나 data interval이 작은 경우에는 catchup 프로세스에 시간이 오래 걸리고 Airflow 시스템 속도가 느려질 수 있습니다.
-- Task dependencies를 확인해야 합니다.
-다른 task에 dependancy가 있는지 airflow는 체크해주지 않으므로, 현재의 dag와 dependancy가 있는 task를 확인해야 합니다.
-- idempotent(멱등성)을 보장하는 task인지 확인해야 합니다.
-언제 실행하더라도 같은 결과를 가져오는 task가 아니라면, catchup tasks에서 side effects를 발생할 수 있습니다.
+dag = DAG(
+    "tutorial",
+    default_args={
+        "depends_on_past": True,
+        "retries": 1,
+        "retry_delay": datetime.timedelta(minutes=3),
+    },
+    start_date=pendulum.datetime(2015, 12, 1, tz="UTC"),
+    description="A simple tutorial DAG",
+    schedule="@daily",
+    catchup=False,
+)
+```
 
-### Operators
+### Backfill
+
+과거의 특정 이력 일자에 대해서 Dag를 실행할 때 사용할 수 있습니다.
+
+- [Backfill Command](https://airflow.apache.org/docs/apache-airflow/stable/cli-and-env-variables-ref.html#backfill)
+
+``` 
+airflow dags backfill \
+    --start-date START_DATE \
+    --end-date END_DATE \
+    dag_id
+```
+
+### Re-run Tasks
+
+- [Re-run Tasks](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#re-run-tasks)
+
+### External Triggers
+
+- [External Triggers](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#external-triggers)
+
+### Passing Parameters when triggering DAGs
+
+- [Passing Parameters when triggering DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#passing-parameters-when-triggering-dags)
+
+```python
+import pendulum
+
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+
+dag = DAG(
+    "example_parameterized_dag",
+    schedule=None,
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    catchup=False,
+)
+
+parameterized_task = BashOperator(
+    task_id="parameterized_task",
+    bash_command="echo value: {{ dag_run.conf['conf1'] }}",
+    dag=dag,
+)
+```
+
+> The parameters from dag_run.conf can only be used in a template field of an operator.
+
+- Using CLI
+
+```shell 
+airflow dags trigger --conf '{"conf1": "value1"}' example_parameterized_dag
+```
+
+- Using UI
+  - [Using UI](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#using-ui)
+
+
+## Core Concepts > Sensor
+
+```python
+from airflow import DAG
+from datetime import datetime, timedelta
+from airflow.sensors.filesystem import FileSensor
+from airflow.operators.bash import BashOperator
+from airflow.utils.dates import days_ago
+
+default_args= {
+    'start_date': days_ago(1),
+    'retries': 0,
+    'catchup': False,
+    'retry_delay': timedelta(minutes=5),
+}
+    
+dag = DAG(
+        'sensor_test', 
+        default_args=default_args, 
+        schedule_interval="@once",
+)
+
+t1 = FileSensor(
+    task_id='sensor_a',
+    fs_conn_id='file_sensor',
+    filepath='a.txt',
+    dag=dag,
+)
+
+t2 = BashOperator(
+    task_id='cat_a',
+    bash_command='cat /opt/airflow/sensor/a.txt',
+    dag=dag,
+)
+
+t1 >> t2
+```
+
+### Sensors
+
+- [Airflow.sensors](https://airflow.apache.org/docs/apache-airflow/2.2.3/_api/airflow/sensors/index.html))
+
+## Operators
 
 - [Operators and Hooks Reference](https://airflow.apache.org/docs/apache-airflow/stable/operators-and-hooks-ref.html)
 
-#### Operator Package 
-
-- [Airflow.sensors](https://airflow.apache.org/docs/apache-airflow/2.2.3/_api/airflow/sensors/index.html)
-
-#### KubernetesPodOnOperator 
+#### KubernetesPodOnOperator
 
 - [Kubernetes Pod On Operator](https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/stable/_modules/index.html)
 
@@ -1280,7 +1532,7 @@ spark_submit_sample = KubernetesPodOperator(
     dag=dag)
 ```
 
-#### Kubernetes Resource Operator 
+#### Kubernetes Resource Operator
 
 - [Kubernetes Resource Operator](https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/stable/_modules/tests/system/providers/cncf/kubernetes/example_kubernetes_resource.html)
 
@@ -1320,7 +1572,7 @@ subjects:
 kubectl apply -f rbac.yaml
 ```
 
-- pods에 대한 권한도 추가로 적용하기 
+- pods에 대한 권한도 추가로 적용하기
 
 ```yaml 
 # Create a cluster role that allowed to perform
@@ -1352,13 +1604,107 @@ subjects:
   namespace: airflow
 ```
 
-- kubectl on airflow 
+- kubectl on airflow
 
   - https://stackoverflow.com/questions/68195000/how-to-get-the-kubernetes-api-key
 
 문제 해결 필요 사항 - 쿠버네티스 API를 airflow worker에서 호출할 때 api 호출에 대한 외부 허용에 대한 rule을 정리해봐야함. namespace가 다른 kube-system으로 호출하는 방법은?....?   
 이건 airflow의 문제가 아닌 api 호출 구조에 대한 정리하는 것이 중요한 포인트로 보임. 아하 이제 이해함...!
 
+# BestPractices
+
+## top-level DAG code를 피하는 방법
+
+- top-level DAG code를 피하지 않는 경우
+
+```python
+import pendulum
+
+from airflow import DAG
+from airflow.decorators import task
+
+
+def expensive_api_call():
+    print("Hello from Airflow!")
+    sleep(1000)
+
+
+my_expensive_response = expensive_api_call()
+
+with DAG(
+    dag_id="example_python_operator",
+    schedule=None,
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["example"],
+) as dag:
+
+    @task()
+    def print_expensive_api_call():
+        print(my_expensive_response)
+```
+
+- top-level DAG code를 회피하는 경우 ( 추천되는 방식 )
+
+```python
+import pendulum
+
+from airflow import DAG
+from airflow.decorators import task
+
+
+def expensive_api_call():
+    sleep(1000)
+    return "Hello from Airflow!"
+
+
+with DAG(
+    dag_id="example_python_operator",
+    schedule=None,
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["example"],
+) as dag:
+
+    @task()
+    def print_expensive_api_call():
+        my_expensive_response = expensive_api_call()
+        print(my_expensive_response)
+```
+
+- 만약 비용이 큰 import 문을 사용해야 하는 경우, Task 안에서 선언해서 사용하는 방식도 추천한다.
+
+```python
+# It's ok to import modules that are not expensive to load at top-level of a DAG file
+import random
+import pendulum
+
+# Expensive imports should be avoided as top level imports, because DAG files are parsed frequently, resulting in top-level code being executed.
+#
+# import pandas
+# import torch
+# import tensorflow
+#
+
+...
+
+
+@task()
+def do_stuff_with_pandas_and_torch():
+    import pandas
+    import torch
+
+    # do some operations using pandas and torch
+
+
+@task()
+def do_stuff_with_tensorflow():
+    import tensorflow
+
+    # do some operations using tensorflow
+```
+
+- [여기서부터 시작하기](https://airflow.apache.org/docs/apache-airflow/stable/best-practices.html#how-to-check-if-my-code-is-top-level-code)
 
 # 운영 관점에서 알고 있어야할 링크
 
@@ -1371,7 +1717,7 @@ subjects:
 
 - [오늘의 집 - Airflow](https://www.bucketplace.com/post/2021-04-13-%EB%B2%84%ED%82%B7%ED%94%8C%EB%A0%88%EC%9D%B4%EC%8A%A4-airflow-%EB%8F%84%EC%9E%85%EA%B8%B0/)
 - [엄청 자세한 튜토리얼 - 왕초보자용](https://velog.io/@clueless_coder/Airflow-%EC%97%84%EC%B2%AD-%EC%9E%90%EC%84%B8%ED%95%9C-%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC-%EC%99%95%EC%B4%88%EC%8B%AC%EC%9E%90%EC%9A%A9)
--[케르베로스(Kerberos)란? 동작이해하기](https://juhi.tistory.com/75)
+  -[케르베로스(Kerberos)란? 동작이해하기](https://juhi.tistory.com/75)
 - [SBOM(Software Bill Of Materials)](https://openbee.kr/444)
 - [Dags 등록 및 사용하기](https://velog.io/@inhwa1025/Airflow-Web-UI-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-%EB%B0%8F-DAG-%EB%93%B1%EB%A1%9D%ED%95%98%EA%B8%B0)
 - [Airflow Operator - Tistory 50](https://mightytedkim.tistory.com/50)
@@ -1382,13 +1728,29 @@ subjects:
 - [Production Guide](https://airflow.apache.org/docs/helm-chart/stable/production-guide.html#accessing-the-airflow-ui)
 - [Airflow Kubernetes 처리](https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/stable/connections/kubernetes.html)
 
-# Airflow 훌륭한 레퍼런스 
+
+- 샘플 자료
+  - [Dag 작성하기 - 기본 문법](https://velog.io/@xxxxxxxx/Airflow-DAG-%EC%9E%91%EC%84%B1%ED%95%98%EA%B8%B0-1-%EA%B8%B0%EB%B3%B8-%EB%AC%B8%EB%B2%95)
+  - [Airflow 변수 관리와 로컬 테스트](https://medium.com/overnodes-tech/airflow-%EB%B3%80%EC%88%98-%EA%B4%80%EB%A6%AC%EC%99%80-%EB%A1%9C%EC%BB%AC-%ED%99%98%EA%B2%BD-%ED%85%8C%EC%8A%A4%ED%8A%B8-da61dc0ea017)
+  - [Apache Airflow - Workflow 관리 도구(1)](https://zzsza.github.io/data/2018/01/04/airflow-1/)
+  - [Airflow 엄청 자세한 튜토리얼 # 왕초심자용](https://velog.io/@clueless_coder/Airflow-%EC%97%84%EC%B2%AD-%EC%9E%90%EC%84%B8%ED%95%9C-%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC-%EC%99%95%EC%B4%88%EC%8B%AC%EC%9E%90%EC%9A%A9)
+  - [세상에서 가장 간단한 Airflow 튜토리얼](https://blog.si-analytics.ai/59)
+  - [여러 조직에서 Airflow 제공하고 1](https://engineering.linecorp.com/ko/blog/multi-tenancy-airflow-1)
+  - [여러 조직에서 Airflow 제공하고 2](https://engineering.linecorp.com/ko/blog/multi-tenancy-airflow-2)
+  - [NFTBank 에서 Airflow 파이프라인을 안전하게 빠르게 개발과 테스트를 할 수 있는 이유](https://blog.nftbank.ai/nftbank%EC%97%90%EC%84%9C-airflow-%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%EC%9D%84-%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C-%EB%B9%A0%EB%A5%B4%EA%B2%8C-%EA%B0%9C%EB%B0%9C%EA%B3%BC-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%A5%BC-%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%9D%B4%EC%9C%A0-653aa18b683e)
+  - [데이터 엔지니어의 Airflow 데이터 파이프라인 CI 테스트 개선기](https://tech.buzzvil.com/blog/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EC%9D%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-ci-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EA%B0%9C%EC%84%A0%EA%B8%B0/)
+  - [Airflow DAG CI/CD 구축기](https://mungiyo.tistory.com/46)
+  - [1. Airflow 설치 및 DAG 실행](https://95mkr.tistory.com/entry/airflow1)
+  - [Testing Airflow](https://docs.astronomer.io/learn/testing-airflow)
+  - [Airflow Unit Testing Guide](https://www.restack.io/docs/airflow-knowledge-apache-unit-testing)
+
+# Airflow 훌륭한 레퍼런스
 
 - [Build A Data Warehouse using MYSQL, Airflow and DBT](https://github.com/nebasam/Data-Warehouse-Tech-Stack/tree/main)
 
-# Airflow Sensor 활용하기 
+# Airflow Sensor 활용하기
 
 - [AirFlow의 Sensor 이해하기](https://www.bearpooh.com/153)
-    - [SQLSensor 사용 방법](https://mvje.tistory.com/191)
-    - [SQL의 데이터 정보 변경시 데이터를 추출하여 데이터 적재 및 갱신 프로세스 처리](https://medium.com/@kausarbazla/airflow-sensors-operators-hooks-99cb077c5dd1)
-    - [Airflow Sensor King](https://marclamberti.com/blog/airflow-sensors/)
+  - [SQLSensor 사용 방법](https://mvje.tistory.com/191)
+  - [SQL의 데이터 정보 변경시 데이터를 추출하여 데이터 적재 및 갱신 프로세스 처리](https://medium.com/@kausarbazla/airflow-sensors-operators-hooks-99cb077c5dd1)
+  - [Airflow Sensor King](https://marclamberti.com/blog/airflow-sensors/)
